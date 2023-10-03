@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/3DUniverse/static/css/main.616137eb.css",
-    "main.js": "/3DUniverse/static/js/main.93f99466.js",
+    "main.css": "/3DUniverse/static/css/main.3a4ee4d4.css",
+    "main.js": "/3DUniverse/static/js/main.ecdea70c.js",
     "static/media/logo.svg": "/3DUniverse/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/3DUniverse/index.html",
-    "main.616137eb.css.map": "/3DUniverse/static/css/main.616137eb.css.map",
-    "main.93f99466.js.map": "/3DUniverse/static/js/main.93f99466.js.map"
+    "main.3a4ee4d4.css.map": "/3DUniverse/static/css/main.3a4ee4d4.css.map",
+    "main.ecdea70c.js.map": "/3DUniverse/static/js/main.ecdea70c.js.map"
   },
   "entrypoints": [
-    "static/css/main.616137eb.css",
-    "static/js/main.93f99466.js"
+    "static/css/main.3a4ee4d4.css",
+    "static/js/main.ecdea70c.js"
   ]
 }
