@@ -17,6 +17,9 @@
 
 body { 
   height: 100%;
+  color: white;
+  font-family: 'Helvetica Neue', sans-serif;
+
 }
 .App-header {
   background-color: #282c34;
@@ -46,4 +49,199 @@ body {
   to {
     transform: rotate(360deg);
   }
+}
+
+
+#overlay-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+
+
+.controls-container > * {
+  pointer-events: auto;
+
+}
+
+.controls-container {
+}
+
+.distances-container{
+  width: 10%;
+
+  float: right;
+}
+
+.distances-container img {
+  height: 80vh;
+}
+
+
+.logo {
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  width: 20%;
+  height: 5%;
+  padding: 20px;
+}
+.logo img {
+  width: 100%;
+}
+
+:root {
+  --main-color: rgb(0, 0, 0);
+  --main-color-hover: rgb(104, 117, 217, 0.2);
+  --track-color: #e3e3e3;
+  --mark-color: #010101;
+
+}
+
+
+
+
+
+
+
+
+
+
+input[type=range][orient=vertical] {
+  appearance: slider-vertical;
+  width: 8px;
+  height: 100%;
+  padding: 0 5px;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.customSlider {
+  /* max width of your slider */
+  /* Optional: Only If you want to center your slider in the page */
+  margin: auto;
+  pointer-events: auto;
+  top: 25px;
+  height: 30px;
+  height: 100%;
+}
+.tick_label_top {
+  top: -20px;
+  width: 120px;
+  text-align: center;
+  position: relative;
+  transform: translate(-40%, 0%);
+  color:black
+}
+
+.selected_tick {
+  color: white
+}
+
+.customSlider-track {
+  /* Top value to align your track to the center of your thumb */
+  top: -1.5px;
+  /* thickness of the track */
+  height: 100%;  
+ /* default color of your track */
+  background: var(--track-color);
+}
+
+.customSlider-track.customSlider-track-0 {
+  /* color of the track before the thumb */
+  background: var(--main-color);
+  border-radius: 0px;
+
+}
+
+.customSlider-mark {
+  cursor: pointer;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  left: -4p;
+  border-radius: 20px;
+  background-color: var(--mark-color);
+}
+
+.selected_mark{
+  background-color: var(--track-color);
+}
+.customSlider-mark:hover {
+  background-color: var(--hover_blue);
+}
+
+.customSlider-mark:hover .tick_label_top {
+  color: var(--hover_blue);
+}
+.slider__labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  position: relative;
+  height: 30px;
+  width: 100%;
+}
+
+.slider__labels-label {
+  text-align: left;
+  font-size: 12pt;
+  font-weight: bold;
+  box-sizing: border-box;
+  pointer-events: auto;
+  
+}
+
+
+
+.custom_slider_container {
+  padding: 0px;
+  padding-right: 60px;
+  bottom: 0px;
+  top: 40%;
+  position: relative;
+}
+
+
+@media only screen and (max-width: 768px)  {
+  .tick_label_top {
+    font-size: 7pt;
+  }
+
+  .custom_slider_container {
+    display: none;
+  }
+}
+
+
+
+.lab {
+  cursor: pointer;
+
+}
+.slider__labels-label:hover {
+  color:red
+}
+
+.slider_mark {
+  font-size: 8pt;
 }

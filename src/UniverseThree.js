@@ -10,16 +10,25 @@ import data from './data.json'
 const UniverseThree = (props) => {
     const { count, shape } = props;
     const radius = 20;
-
-    console.log(data["points"])
+    const universeMult = props.universe_distance;
     const universePositions = data["points"]
     const universeColors = data["colors"]
+    const universeSizes = data["size"]
     const uniforms = useMemo(() => ({
         uTime: {
           value: 0.0
         },
         uRadius: {
           value: radius
+        },
+        uClose: {
+          value: 5
+        },
+        uFar: {
+            value: 1000000000000
+        },
+        uDistance: {
+          value: props.distance
         }
       }), [])
     
@@ -30,7 +39,7 @@ const UniverseThree = (props) => {
       const positions = new Float32Array(universePositions.length * 3);
 
       universePositions.forEach((element, index) => {
-        positions.set([element[0], element[1], element[2]], index * 3 )
+        positions.set([element[0] * universeMult, element[1] * universeMult, element[2] * universeMult], index * 3 )
         
       });
   
@@ -43,10 +52,31 @@ const UniverseThree = (props) => {
         
         universeColors.forEach((element, index) => {
             colors.set([element[0], element[1], element[2]], index * 3 )
-            
         });
         return colors
     })
+
+
+    const particlesSize = useMemo(()=> {
+      const sizes = new Float32Array(universeSizes.length);
+
+      universeSizes.forEach((element, index) => {
+        sizes.set([element], index )
+
+        
+
+      });
+
+      return sizes
+      
+  })
+
+
+
+
+    useFrame((state) => {
+      points.current.material.uniforms.uDistance.value = props.distance;
+  })
 
 
     return (
@@ -65,6 +95,14 @@ const UniverseThree = (props) => {
             array={particlesColor}
             itemSize={3}
           />
+        
+
+        <bufferAttribute
+            attach="attributes-ABC"
+            count={particlesSize.length}
+            array={particlesSize}
+            itemSize={1}
+        />
         </bufferGeometry>
 
         <shaderMaterial
@@ -74,6 +112,7 @@ const UniverseThree = (props) => {
         uniforms={uniforms}
         vertexColors= {true}
         transparent = {true}
+        
       />
 
       </points>
