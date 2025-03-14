@@ -1,0 +1,26 @@
+.sector_header {
+    position: absolute;
+    left: 50%;
+    top: 80%;
+    width: 100%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .sector_header h1 {
+    font-weight: 100;
+    letter-spacing: 0.1em;
+    margin: 0px;
+  }
+
+
+  .sector_header h2 {
+    margin: 0%;
+    font-weight: 200 !important;
+    font-size: 30pt;
+
+  }
+
+
+  .sector_header > * {
+    pointer-events: auto;
+  }

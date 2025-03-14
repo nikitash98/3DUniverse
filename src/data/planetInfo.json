@@ -1,0 +1,50 @@
+{
+    "planets": [
+      {
+        "name": "Mercury",
+        "diameter_km": 4879,
+        "distance_from_sun_mkm": 57.9
+      },
+      {
+        "name": "Venus",
+        "diameter_km": 12104,
+        "distance_from_sun_mkm": 108.2
+      },
+      {
+        "name": "Earth",
+        "diameter_km": 12742,
+        "distance_from_sun_mkm": 149.6
+      },
+      {
+        "name": "Mars",
+        "diameter_km": 6779,
+        "distance_from_sun_mkm": 227.9
+      },
+      {
+        "name": "Jupiter",
+        "diameter_km": 139820,
+        "distance_from_sun_mkm": 778.5
+      },
+      {
+        "name": "Saturn",
+        "diameter_km": 116460,
+        "distance_from_sun_mkm": 1434.0
+      },
+      {
+        "name": "Uranus",
+        "diameter_km": 50724,
+        "distance_from_sun_mkm": 2871.0
+      },
+      {
+        "name": "Neptune",
+        "diameter_km": 49244,
+        "distance_from_sun_mkm": 4497.1
+      },
+      {
+        "name": "Sun",
+        "diameter_km": 1391016,
+        "distance_from_sun_mkm": 0
+      }
+  
+    ]
+  }

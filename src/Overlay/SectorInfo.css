@@ -1,0 +1,46 @@
+
+.sector_info {
+text-align: left;
+padding: 20px;
+border: solid 1px white;
+border-radius: 20px;
+pointer-events: auto;
+}
+
+
+
+
+.sector_info h1 {
+    font-size: 20pt;
+    font-weight: 300;
+    width: 50%;
+    display: inline;
+}
+
+
+.hidden {
+    opacity: 0%;
+    transition: all 1s;
+}
+
+.explanation_text {
+    height: 0px;
+    display: none;
+}
+
+.explanation_text img {
+    width: 100%;
+}
+.text_expand {
+    height: 100%;
+    visibility: visible;
+    display: block;
+
+}
+
+.icon {
+    height: 20px;
+    width: 20px;
+    float: right;
+    display: inline;
+}

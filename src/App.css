@@ -21,6 +21,20 @@ body {
   font-family: 'Helvetica Neue', sans-serif;
 
 }
+
+p {
+  color: white;
+}
+h1 {
+  color:white;
+  font-family: 'Helvetica Neue', sans-serif !important;
+
+}
+h2{
+  color: white;
+  font-family: 'Helvetica Neue', sans-serif !important;
+
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -59,15 +73,23 @@ body {
   top: 0%;
   left: 0%;
   pointer-events: none;
-  z-index: 5;
+  z-index: 10;
 }
 
 
 
+.caption_type {
+  font-size: 100pt;
+  font-weight: 300;
+  color: white;
+  font-family: "Helvetica Neue";
+  text-transform: uppercase;
+}
 .controls-container > * {
   pointer-events: auto;
 
 }
+
 
 .controls-container {
 }
@@ -83,17 +105,6 @@ body {
 }
 
 
-.logo {
-  position: absolute;
-  left: 0%;
-  top: 0%;
-  width: 20%;
-  height: 5%;
-  padding: 20px;
-}
-.logo img {
-  width: 100%;
-}
 
 :root {
   --main-color: rgb(0, 0, 0);
@@ -112,10 +123,11 @@ body {
 
 
 
+
 input[type=range][orient=vertical] {
   appearance: slider-vertical;
   width: 8px;
-  height: 100%;
+  height: 70%;
   padding: 0 5px;
 
 }
@@ -232,8 +244,23 @@ input[type=range][orient=vertical] {
   }
 }
 
+.controls-container {
+  padding-top: 10%;
 
-
+}
+.controls-container h1{
+  font-weight: 300;
+  font-size: 30pt;
+  margin: 0%;
+  border: solid 1px white;
+  margin: 10px;
+}
+.controls-container h2 {
+  font-weight: 400;
+  margin: 0%;
+  font-size: 12pt;
+  text-align: left;
+}
 .lab {
   cursor: pointer;
 

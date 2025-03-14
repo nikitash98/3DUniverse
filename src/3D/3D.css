@@ -1,0 +1,22 @@
+
+.planet_text {
+    color: white;
+    user-select: none;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE/Edge */
+    text-align: center;
+    transform: translate(0, +100%);
+    background-color: rgba(0, 0, 0, 0.406);
+    padding: 2px;
+    width: 100px;
+    font-size: 10pt;
+    cursor: pointer;
+    z-index: -10;
+    opacity: 0.5;
+  }
+
+  .planet_text:hover {
+    color: white;
+    opacity: 1;
+  }

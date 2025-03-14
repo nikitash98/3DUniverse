@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import myData from './data.json';
+import myData from './Galaxies/data.json';
 
 import reportWebVitals from './reportWebVitals';
 

@@ -1,0 +1,16 @@
+{
+    "earth": {
+        "distance": 100,
+        "position": [0, 0, 0],
+        "lookAt": [0, 0, 0],
+        "image": "Info_Images/Earth.jpg",
+        "info": "abc"
+    },
+    "moon": {
+        "distance": 100,
+        "position": [0.00035, 0.0, 0],
+        "lookAt": [0, 0, 0],
+        "image": "Info_Images/moon.jpg",
+        "info": "abc"
+    }
+}
