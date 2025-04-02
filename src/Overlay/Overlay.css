@@ -15,11 +15,67 @@
     color: white;
   }
 
+  .header_text {
+    color: white;
+    font-size: 24pt;
+  }
   .clickable {
     pointer-events: auto;
   }
+  a {
+    color: grey;
+  }
 
+  .classic_icon {
+    background-color: rgba(148, 51, 51, 0) !important;
+    pointer-events: auto;
+  }
+  .classic_icon img {
+    width: 45px;
+    height: 45px;
+    filter: invert(50%) sepia(100%) saturate(0%) hue-rotate(136deg) brightness(112%) contrast(100%);
 
+  }
+  .classic_icon img:hover {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(136deg) brightness(112%) contrast(100%);
+
+  }
+
+  .close_button img {
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(136deg) brightness(112%) contrast(100%);
+    width: 25px;
+    cursor: pointer;
+  }
+
+  .ui.button {
+    font-family: 'Helvetica Neue', sans-serif;
+    font-weight: 300;
+  }
+  .ui_visible_container {
+    position: absolute;
+    bottom: 2%;
+    right: 50%;
+    transform: translate(50%, 0%);
+    pointer-events: auto;
+  }
+
+  .toggle_button {
+    background: none !important;
+    color: grey !important;
+    padding: 0px !important;
+  }
+  .ui.button.toggle.active:hover{
+    background: none !important;
+    color: white !important;
+  }
+  .ui.button.toggle:hover {
+    color: white !important;
+  }
+
+  .ui.button.toggle.active, .ui.buttons .button.toggle.active, .ui.toggle.buttons .active.button {
+    background: none !important;
+    color: white !important;
+  }
 .testbutton {
   border: none;
   background-color: black;
@@ -102,7 +158,7 @@
   
   .customSlider-track.customSlider-track-0 {
     /* color of the track before the thumb */
-    background: var(--main-color);
+    background: white;
     border-radius: 0px;
   }
   .customSlider-thumb {
@@ -112,12 +168,10 @@
   }
   .customSlider-mark {
     cursor: pointer;
-    top: -4px;
-    width: 8px;
-    height: 8px;
-    left: -4p;
-    border-radius: 20px;
-    background-color: var(--mark-color);
+    width: 10px;
+    left: 0px;
+    height: 1px;
+    background-color: grey;
   }
 
 
@@ -129,11 +183,11 @@
     background-color: var(--track-color);
   }
   .customSlider-mark:hover {
-    background-color: var(--hover_blue);
+    background-color: red;
   }
 
   .customSlider-mark:hover .tick_label_top {
-    color: var(--hover_blue);
+    color: red;
   }
   .slider__labels {
     display: flex;

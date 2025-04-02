@@ -20,9 +20,10 @@ const Satellites = (props) => {
           value: 0.0
         },
         pointTexture: { value: new THREE.TextureLoader().load( 'circle.png' ) }
-
     }), []
     )
+
+    
     const labelRefs = useRef({})
     useFrame((state) => 
     {

@@ -17,9 +17,11 @@ let start_dist = 0.0000000001
 let end_dist = 200000000000
 const cameraControlsRef = useRef()
 
+const [autoRotate, setAutoRotate] = useState(true);
 
 
 const vec = useRef(new THREE.Vector3(0, 0, 0));
+const timeoutRef = useRef(null);
 
 /*
 const canvas = document.getElementById("canvas");
@@ -39,39 +41,58 @@ const handleScroll = () => {
 useEffect(() => {
   window.addEventListener('mousewheel', handleScroll);
   console.log("added event")
+  /*
+  const controls = cameraControlsRef.current;
+  if (controls) {
+    const stopAutoRotate = () => setAutoRotate(false);
+    controls.addEventListener("control", stopAutoRotate);
+    return () => controls.removeEventListener("control", stopAutoRotate);
+  }
 
   // Remove the event listener when the component is unmounted
   return () => {
     window.removeEventListener('mousewheel', handleScroll);
   };
+
+  */
+  const controls = cameraControlsRef.current;
+
+  const stopAutoRotate = () => {
+    setAutoRotate(false);
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => setAutoRotate(true), 5000); // Restart auto-rotate after 5s
+  };
+
+  controls.addEventListener("control", stopAutoRotate);
+  return () => controls.removeEventListener("control", stopAutoRotate);
+
 }, []);
 
 
 useEffect(()=> {
-  console.log("Moving")
   cameraControlsRef?.current?.setLookAt(...props.cameraPosition , ...props.cameraTarget, true);
 }, [props.cameraTarget]);
 
 
 
+useEffect(()=> {
+  cameraControlsRef?.current?.setLookAt(...props.cameraPosition , ...props.cameraTarget, true);
+}, [props.cameraPosition]);
 
+
+
+/*
 useEffect(()=> {
   console.log(data[props.sector].position)
   vec.current.set(data[props.sector].position[0], data[props.sector].position[1], data[props.sector].position[2], )
 
-  /*
-  if(props.sector == "Earth") {
-    mainCamera.rotation.set(0, 0, 0);
-    vec.current.set(0, 0.0, 0.00002)
-
-  } else if (props.sector == "Moon") {
-    //mainCamera.position.set(0.379274 * 0.001, -0.00025*0.001, 0.000001);
-    vec.current.set(0.0004, 0.0, 0)
-  }
-  */
-
   props.set_zoom_to(true)
 }, [props.sector])
+*/
+
+
+
+
 useEffect(() => {
   // gl === WebGLRenderer
   // gl.info.calls
@@ -86,20 +107,30 @@ useEffect(() => {
 
 
 useEffect(()=> {
-  console.log("SectorUpdated")
-  console.log(mainCamera.position)
-  let cameraDistance = mainCamera.position.length();
-  let newDist = .5
-  if(props.sectorIncrementing) {
-  }  else {
-    newDist = 1000
-  }
-  props.setDistance(newDist)
-  mainCamera.position.set(mainCamera.position.x/cameraDistance * newDist, mainCamera.position.y/cameraDistance * newDist, mainCamera.position.z/cameraDistance * newDist)
+  props.setDistance(100)
 
+  //cameraControlsRef?.current?.setLookAt(...[0, 100, 0] , ...[0, 0, 0], false);
 }, [props.sectorValue])
-useFrame((state) => {
+
+useFrame((state, delta) => {
+  let maxValue = 1000000
+    if(mainCamera.position.length() < 0.1) {
+      props.setSectorValue(prevSector => prevSector-1)
+      let newCameraPosition = mainCamera.position.divideScalar(mainCamera.position.length()).multiplyScalar(maxValue * 0.9);
+      cameraControlsRef?.current?.setLookAt(...newCameraPosition , ...[0, 0, 0], false);
+    }
+
+    if(mainCamera.position.length() > maxValue) {
+      props.setSectorValue(prevSector => prevSector+1)
+      let newCameraPosition = mainCamera.position.divideScalar(mainCamera.position.length()).multiplyScalar(.15);
+      cameraControlsRef?.current?.setLookAt(...newCameraPosition , ...[0, 0, 0], false);
+    }
+    if (autoRotate && cameraControlsRef.current) {
+      cameraControlsRef.current.azimuthAngle += delta * 0.05; // Adjust speed as needed
+      cameraControlsRef.current.update(delta);
+    }
     props.setDistance(mainCamera.position.length())
+
 });
   return <>
   

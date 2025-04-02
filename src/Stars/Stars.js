@@ -129,7 +129,10 @@ const Stars = (props) => {
       />
       </points>
 
-      {data["proper"].map((value, index) =>  {        
+      {data["proper"].map((value, index) =>  {
+        if(props.labelsVisible) {
+          return;
+        }    
         if(index < Math.min(Math.pow(props.distance, 1.2), 400.0)){
           return
         }
@@ -140,15 +143,19 @@ const Stars = (props) => {
               props.setCameraTarget(star_position)
               let newCameraPosition = [star_position[0]-2, star_position[1], star_position[2]]
               props.setCameraPosition(newCameraPosition)
+              props.setInfoBoxShowing(true)
+              props.setInfoBoxTitle(value)
           }}>  
             {value}
           </div>
         </Html>
       )
       })}
-
-
+      
       {Object.entries(constellationdata).map(([key, value], index) => {
+        if(props.constellationConnections) {
+          return
+        }
         if(constellationdata[key]["points"].length <= 0) {
           return
         }
@@ -164,6 +171,7 @@ const Stars = (props) => {
           )
       }
        )}
+
       </>
 
     );

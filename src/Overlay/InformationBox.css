@@ -1,0 +1,34 @@
+.informationBoxContainer {
+    width: 100%;
+    border: solid rgba(255, 255, 255, 0.272) 1px;
+    padding: 20px;
+    background-color: black;
+    z-index: 500;
+}
+
+.informationBoxContainer > * {
+    pointer-events: auto;
+}
+
+img {
+    width: 100%;
+}
+
+.informationBoxHeader {
+    height: auto;
+    font-size: 100pt;
+
+}
+.informationBoxImageCaption {
+    color: grey;
+    font-style: italic;
+    text-align: right;
+}
+
+.close_button {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    background: none;
+    border: none;
+}

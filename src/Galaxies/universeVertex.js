@@ -35,7 +35,7 @@ void main() {
   gl_Position = projectedPosition;
 
   float vDistance = length(viewPosition.xyz);
-  float universeSize = psize * 50.0/vDistance;
+  float universeSize = 1.0 * 50.0/vDistance;
   gl_PointSize = universeSize ;
   vColor = color;
   if(universeSize < 1.0) {
