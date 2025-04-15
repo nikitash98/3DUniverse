@@ -7,7 +7,7 @@ import { useRef } from 'react';
 import * as THREE from 'three'
 import { CameraControls, OrbitControls, TrackballControls } from '@react-three/drei';
 import { useScroll } from '@react-three/drei';
-
+import { Box } from '@react-three/drei';
 import data from "./sectorinfo.json"
 import { distance } from 'three/src/nodes/TSL.js';
 const Handler = (props) => {
@@ -60,7 +60,7 @@ useEffect(() => {
   const stopAutoRotate = () => {
     setAutoRotate(false);
     clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => setAutoRotate(true), 5000); // Restart auto-rotate after 5s
+    timeoutRef.current = setTimeout(() => setAutoRotate(true), 15000); // Restart auto-rotate after 5s
   };
 
   controls.addEventListener("control", stopAutoRotate);
@@ -113,6 +113,11 @@ useEffect(()=> {
 }, [props.sectorValue])
 
 useFrame((state, delta) => {
+  if(state.clock.getElapsedTime() < 0.5) {
+    return
+  }
+
+  
   let maxValue = 1000000
     if(mainCamera.position.length() < 0.1) {
       props.setSectorValue(prevSector => prevSector-1)
@@ -124,18 +129,39 @@ useFrame((state, delta) => {
       props.setSectorValue(prevSector => prevSector+1)
       let newCameraPosition = mainCamera.position.divideScalar(mainCamera.position.length()).multiplyScalar(.15);
       cameraControlsRef?.current?.setLookAt(...newCameraPosition , ...[0, 0, 0], false);
+
     }
+
+
+
     if (autoRotate && cameraControlsRef.current) {
       cameraControlsRef.current.azimuthAngle += delta * 0.05; // Adjust speed as needed
       cameraControlsRef.current.update(delta);
     }
     props.setDistance(mainCamera.position.length())
 
+    const direction = new THREE.Vector3();
+    mainCamera.getWorldDirection(direction);
+
+    // Convert to spherical coordinates
+    const dec = THREE.MathUtils.radToDeg(Math.asin(direction.y)); // Declination
+    const ra = THREE.MathUtils.radToDeg(Math.atan2(direction.x, direction.z)); // Right Ascension
+    props.setRaDec([(ra + 360)%360, dec])
+
 });
   return <>
-  
+
   <CameraControls ref = {cameraControlsRef} minDistance = {start_dist} maxDistance={end_dist} noPan target={[0, 0, 0]} >
-      <perspectiveCamera position={[0, 0, 0]} fov={80} />
+      <perspectiveCamera position={[0, 1, 0]} fov={80} >
+      <group position={[-2, -2, -2]}>
+
+<mesh >
+<boxGeometry args={[0.2, 0.2, 0.2]} />
+<meshBasicMaterial color="hotpink" />
+</mesh>
+</group>
+
+        </perspectiveCamera>
   </CameraControls>
 
   </>

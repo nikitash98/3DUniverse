@@ -104,7 +104,6 @@ const Satellites = (props) => {
     useFrame((state) => { 
       Object.entries(labelRefs.current).forEach(([key, ref]) => {
         if(ref.current) {
-          console.log(ref.current.position)
           ref.current.position.set(Math.random() * 2, Math.random() * 2, Math.random() * 2)
         }
 

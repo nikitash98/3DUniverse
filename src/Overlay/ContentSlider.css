@@ -1,0 +1,123 @@
+
+.customSlider {
+    /* max width of your slider */
+    /* Optional: Only If you want to center your slider in the page */
+    margin: auto;
+    pointer-events: auto;
+    top: 25px;
+    overflow: hidden;
+    text-align: center;
+    align-items: center;
+
+  }
+  .tick_label_top {
+    top: -20px;
+    width: 120px;
+    text-align: center;
+    position: relative;
+    transform: translate(-45%, 0%);
+    color:black;
+  }
+
+
+
+  .selected_tick {
+    color: rgba(255, 255, 255, 0);
+    
+  }
+
+  .customSlider-track {
+    /* Top value to align your track to the center of your thumb */
+    top: -1.5px;
+    /* thickness of the track */
+    width: 1px;
+   /* default color of your track */
+    background: var(--dark-grey);
+    overflow: hidden;
+    left: 50%;
+  }
+  
+  .customSlider-track.customSlider-track-0 {
+    /* color of the track before the thumb */
+    background: var(--light-grey);
+    border-radius: 0px;
+  }
+  .customSlider-thumb {
+    left: 50%;
+    width: 20px;
+    height: 1px;
+    background-color: var(--light-grey);
+    transform: translate(-50%, 0);
+  }
+  .customSlider-mark {
+    cursor: pointer;
+    width: 10px;
+    height: 1px;
+    background-color: grey;
+    transform: translate(-50%, 0%);
+  }
+
+
+  .end_mark {
+    border: solid 2px var(--track-color);
+    background-color: white;
+  }
+  .selected_mark{
+    background-color: var(--track-color);
+  }
+  .customSlider-mark:hover {
+    background-color: red;
+  }
+
+  .customSlider-mark:hover .tick_label_top {
+    color: red;
+  }
+  .slider__labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    position: relative;
+    height: 30px;
+    width: 100%;
+  }
+  
+  .slider__labels-label {
+    text-align: left;
+    font-size: 12pt;
+    font-weight: bold;
+    box-sizing: border-box;
+    pointer-events: auto;
+    
+  }
+
+
+
+  .custom_slider_container {
+    padding: 0px;
+    padding-right: 60px;
+    bottom: 0px;
+    position: relative;
+  }
+
+
+  
+  .lab {
+    cursor: pointer;
+
+  }
+  .slider__labels-label:hover {
+    color:red
+  }
+
+  .slider_mark {
+    font-size: 8pt;
+  }
+
+ 
+  .slider_label_text {
+    position: absolute;
+    left: -50px;
+    text-align: right;
+    text-wrap: nowrap;
+    color: var(--medium-grey);
+  }

@@ -112,6 +112,10 @@ h2{
   --track-color: #e3e3e3;
   --mark-color: #010101;
 
+  --light-grey: rgb(200, 200, 200);
+  --medium-grey: rgb(145, 145, 145);
+  --dark-grey: rgb(50, 50, 50);
+
 }
 
 

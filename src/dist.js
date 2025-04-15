@@ -40,16 +40,12 @@ function main(err, regl) {
   })
   .then(data => {
     // Handle the JSON data here
-    console.log(data);
-    console.log(data["points"])
     let new_points = data["points"].map(p => ({
         x: p[0],
         y: p[1],
         color: [0, Math.random(), 0]
     }))
 
-    console.log(points)
-    console.log(new_points)
 
 
       

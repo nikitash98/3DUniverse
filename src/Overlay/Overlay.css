@@ -15,6 +15,7 @@
     color: white;
   }
 
+
   .header_text {
     color: white;
     font-size: 24pt;
@@ -89,145 +90,24 @@
 
   }
   
-  .customSlider {
-    /* max width of your slider */
-    /* Optional: Only If you want to center your slider in the page */
-    margin: auto;
-    pointer-events: auto;
-    top: 25px;
-    width: 10px;
-    overflow: hidden;
-    text-align: center;
-    align-items: center;
+
+  .inline_button img {
+    width: 15px;
+    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(136deg) brightness(112%) contrast(100%);
 
   }
-  .tick_label_top {
-    top: -20px;
-    width: 120px;
-    text-align: center;
-    position: relative;
-    transform: translate(-45%, 0%);
-    color:black;
+
+  .inline_button {
+    display: inline-block;
+    background: none;
+    border: none;
   }
 
-  /*
-  @media only screen and (max-width: 800x)  {
-    .custom_slider_container {
-      display: none;
-      background-color: red;
-    }
+  .guided_text {
+    color: white;
+    font-size: 20pt;
+    display: inline-block;
+    font-weight: 200;
+    font-family: 'Helvetica Neue', sans-serif;
+    padding: 20px;
   }
-
-
-@media only screen and (min-width: 800px) and (max-width:1000px){
-    .tick_label_top {
-    display: none !important;
-    background-color: red !important;
-  }  
-}
-*/
-@media only screen and (max-width: 768px)  {
-  .custom_slider_container {
-    display: none;
-    background-color: red;
-  }
-}
-
-@media only screen and (min-width: 768px) and (max-width:1000px){
-  .tick_label_top {
-  display: none !important;
-  background-color: red !important;
-}  
-}
-
-  .selected_tick {
-    color: rgba(255, 255, 255, 0);
-    
-  }
-
-  .customSlider-track {
-    /* Top value to align your track to the center of your thumb */
-    top: -1.5px;
-    /* thickness of the track */
-    width: 1px;
-   /* default color of your track */
-    background: var(--track-color);
-    overflow: hidden;
-    left: 50%;
-  }
-  
-  .customSlider-track.customSlider-track-0 {
-    /* color of the track before the thumb */
-    background: white;
-    border-radius: 0px;
-  }
-  .customSlider-thumb {
-    width: 50px;
-    height: 1px;
-    background-color: white;
-  }
-  .customSlider-mark {
-    cursor: pointer;
-    width: 10px;
-    left: 0px;
-    height: 1px;
-    background-color: grey;
-  }
-
-
-  .end_mark {
-    border: solid 2px var(--track-color);
-    background-color: white;
-  }
-  .selected_mark{
-    background-color: var(--track-color);
-  }
-  .customSlider-mark:hover {
-    background-color: red;
-  }
-
-  .customSlider-mark:hover .tick_label_top {
-    color: red;
-  }
-  .slider__labels {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-    position: relative;
-    height: 30px;
-    width: 100%;
-  }
-  
-  .slider__labels-label {
-    text-align: left;
-    font-size: 12pt;
-    font-weight: bold;
-    box-sizing: border-box;
-    pointer-events: auto;
-    
-  }
-
-
-
-  .custom_slider_container {
-    padding: 0px;
-    padding-right: 60px;
-    bottom: 0px;
-    position: relative;
-  }
-
-
-  
-  .lab {
-    cursor: pointer;
-
-  }
-  .slider__labels-label:hover {
-    color:red
-  }
-
-  .slider_mark {
-    font-size: 8pt;
-  }
-
- 

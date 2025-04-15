@@ -8,12 +8,7 @@ const InformationBox = (props) => {
                 <button className="close_button" onClick={()=>props.setInfoBoxShowing(false)}>
                     <img src={"icons/Close_Icon.svg"}/>
                 </button>
-                <div className="  informationBoxHeader">
-                    <h1>
-                        {props.infoBoxTitle}
-                    </h1>
-                </div>
-
+                {/*
                 <div className="informationBoxData">
                     <Grid>
                         <Grid.Column width={4}>
@@ -34,14 +29,21 @@ const InformationBox = (props) => {
 
                     </Grid>
                 </div>
-
+                */}
                 <div className="informationBoxImageContainer">
                     <img src={"Info_Images/NASA_sun.jpg"}/>
                 </div>
-
                 <div className="informationBoxImageCaption">
                     Testing caption text
                 </div>
+
+
+                <div className="  informationBoxHeader">
+                    <h1>
+                        {props.infoBoxTitle}
+                    </h1>
+                </div>
+
 
                 <Divider/>
 

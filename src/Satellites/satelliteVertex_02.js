@@ -11,7 +11,7 @@ attribute float mean_motion;    // Semi-major axis (km)
 
 uniform float time;          // Animation time
 
-varying vec3 vColor;
+varying vec4 vColor;
 
 const float PI = 3.141592653589793;
 const float TWO_PI = 6.28318530718;
@@ -29,7 +29,7 @@ mat3 rotation3dY(float angle) {
 
 
 void main() {
-    float n = TWO_PI * mean_motion / 600.0; // Mean motion in radians per second
+    float n = TWO_PI * mean_motion / 5000.0; // Mean motion in radians per second
 
     // Compute the true anomaly from mean anomaly (simplified approximation)
     float E = mean_anomaly + eccentricity * sin(mean_anomaly); // Eccentric anomaly
@@ -67,8 +67,9 @@ void main() {
 
     float vDistance = length(viewPosition.xyz);
 
-    gl_PointSize = 8.0/vDistance;
-    vColor = vec3(1.0);
+    gl_PointSize = 4.0/vDistance;
+    vColor = vec4(1.0);
+    vColor.a = 1.0/vDistance;
 
     vec3 pos_test = vec3(0.0);
     pos_test = position;

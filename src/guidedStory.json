@@ -1,0 +1,15 @@
+[
+    {
+        "title": "Earth",
+        "cameraPosition": [0, 0, 0],
+        "cameraTarget": [0, 0, 0],
+        "caption": "This is a test caption"
+    },
+    {
+        "title": "ISS",
+        "cameraPosition": [0, 0, 0],
+        "cameraTarget": [0, 0, 0],
+        "caption" : "This is another test caption"
+    }
+
+]

@@ -16,8 +16,13 @@ img {
 
 .informationBoxHeader {
     height: auto;
-    font-size: 100pt;
+    font-size: 100pt;   
 
+}   
+
+.informationBoxHeader h1 {
+    font-weight: 200;
+    letter-spacing: 2px;
 }
 .informationBoxImageCaption {
     color: grey;

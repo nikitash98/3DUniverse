@@ -35,7 +35,9 @@ import RADECGrid from './3D/DecGrid.js';
 import { ISS } from './3D/ISS.jsx';
 import Satellites_02 from './Satellites/Satellites_02.js';
 import * as THREE from 'three';
-
+import NearGalaxies from './Galaxies/NearGalaxies.js';
+import SDSSGalaxies from './Galaxies/SDSSGalaxies.js';
+import Compass from './3D/Compass.js';
 
 const TotalViz = (props) => {
 
@@ -43,17 +45,24 @@ const TotalViz = (props) => {
     let end_dist = 200000000000
     const [showExtraGalaxies, setShowExtraGalaxies] = useState(false)
     const [distance, setDistance] = useState(start_dist);
-    const [sectorValue, setSectorValue] = useState(2);
+    const [sectorValue, setSectorValue] = useState(0);
     const [sector, setSector] = useState("Earth");
     const [showSectorInfo, setShowSectorInfo] = useState(true)
     const [zoom_to, set_zoom_to] = useState(false)
+
+
+    const [guidedSection, setGuidedSection] = useState(0)
+
+    const [guided, setGuided] = useState(true)
     const [sectorIncrementing, setSectorIncrementing] = useState(true);
+
+    const [raDec, setRaDec] = useState([0, 0]);
 
     const [cameraTarget, setCameraTarget] = useState([0, 0, 0])
     const [cameraPosition, setCameraPosition] = useState([0,0, 3])
 
     const [radecGrid, setradecGrid] = useState(false)
-    const [constellationConnections, setconstellationConnections] = useState(true)
+    const [constellationConnections, setconstellationConnections] = useState(false)
 
     let universe_distance = 100000
     let star_distance = 0.7
@@ -73,7 +82,6 @@ const TotalViz = (props) => {
     ];
   
     // Convert points to BufferGeometry
-  
 
     return<>
         <div id='overlay-container'>
@@ -92,9 +100,12 @@ const TotalViz = (props) => {
           setInfoBoxShowing = {setInfoBoxShowing}
           infoBoxShowing = {infoBoxShowing}
           infoBoxTitle = {infoBoxTitle}
-
           labelsVisible = {labelsVisible}
           setLabelsVisible = {setLabelsVisible}
+          raDec = {raDec}
+          cameraTarget = {cameraTarget}
+          guidedSection = {guidedSection}
+          setGuidedSection = {setGuidedSection}
           />
         </div>
 
@@ -103,7 +114,9 @@ const TotalViz = (props) => {
               <CheckGPULimits/>
               <ambientLight intensity={0.01} />
               <directionalLight intensity={1} color="white" position={[0, 10, 10]}  castShadow/>
-
+              {/*
+              <Compass/>
+              */}
 
 
             {(sectorValue == 0) &&
@@ -211,7 +224,9 @@ const TotalViz = (props) => {
               }>
             
             <>
-                <Stars star_distance = {star_distance} distance = {distance}  
+                <Stars 
+                star_distance = {star_distance} 
+                distance = {distance}  
                 constellationConnections = {constellationConnections}
                 setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}
                 setInfoBoxShowing  = {setInfoBoxShowing}
@@ -223,10 +238,10 @@ const TotalViz = (props) => {
 
                   <group position={[0, 0, 0]} rotation = {[0, 0, 1.1]}>
                     <group position={[0, -15.6, 0]}>
-                     <Ecliptic xRadius={2146} zRadius = {2146}/>
+                     <Ecliptic xRadius={1134.27185637} zRadius = {1134.27185637}/>
                     </group>
                     <group position={[0, 15.6, 0]}>
-                     <Ecliptic xRadius={2146} zRadius = {2146}/>
+                     <Ecliptic xRadius={1134.27185637} zRadius = {1134.27185637}/>
                     </group>
 
                     <lineSegments>
@@ -258,7 +273,6 @@ const TotalViz = (props) => {
             </>
             </Suspense>
 
-
             }
             {(sectorValue == 2) &&
             <Suspense fallback = {
@@ -266,7 +280,21 @@ const TotalViz = (props) => {
             }>
 
             <>
+              {/*
+              */}
+
+              <SDSSGalaxies/>
+              <NearGalaxies
+              distance = {distance}  
+              setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}
+              setInfoBoxShowing  = {setInfoBoxShowing}
+              labelsVisible = {labelsVisible}
+              setInfoBoxTitle = {setInfoBoxTitle}
+              />
+              {/*
               <UniverseThree count={1000} shape="sphere" universe_distance = {universe_distance} distance = {distance} />
+              */}
+
               <CMB percentage_away = {Math.min(distance/500000.0, 1.0)}/>
 
             <group position={[0, 0, 0]} rotation = {[0, 0, 1.1]}>
@@ -304,7 +332,7 @@ const TotalViz = (props) => {
               cameraPosition = {cameraPosition}
               cameraTarget = {cameraTarget}
               setSectorValue = {setSectorValue}
-              
+              setRaDec = {setRaDec}
               />
             </Canvas>
         </div>
