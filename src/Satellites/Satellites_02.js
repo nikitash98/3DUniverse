@@ -17,22 +17,23 @@ const Satellites_02 = (props) => {
     const mean_motion = data["Mean Motion (rev/day)"]
     const semi_major = data["Semi-major Axis (km)"]
 
+
     const uniforms = useMemo(() => ({
         time: {
           value: 0.0
         },
-        pointTexture: { value: new THREE.TextureLoader().load( 'circle.png' ) }
+        pointTexture: { value: new THREE.TextureLoader().load( 'icons/X.png' ) }
 
     }), []
     )
     const labelRefs = useRef({})
+    const labelRef = useRef();
     useFrame((state) => 
     {
       const { clock } = state;
       points.current.material.uniforms.time.value = clock.getElapsedTime();
     }
     );
-
 
     useEffect(()=> {
     }, []);
@@ -109,7 +110,25 @@ const Satellites_02 = (props) => {
         const sizes = new Float32Array(arg_perigee.length).fill(5 + Math.random() * 10);
         return sizes
     })
+    
 
+    const center = [0, 0, 0]; // The center point around which the label will rotate
+    const radius = 1.1; // Distance from the center point
+    const speed = 0.1; // Speed of rotation
+  
+    // Use useFrame to update the label's position on each frame
+    useFrame(({ clock }) => {
+      if (labelRef.current) {
+        const elapsedTime = clock.getElapsedTime();
+        
+        // Calculate new position using circular motion
+        const x = center[0] + radius * Math.cos(elapsedTime * speed);
+        const z = center[2] + radius * Math.sin(elapsedTime * speed);
+        // Update label's position
+        labelRef.current.position.set(x, center[1], z);
+      }
+    });
+  
     return <>
           <points ref={points}>
             <bufferGeometry>
@@ -179,6 +198,29 @@ const Satellites_02 = (props) => {
 
       />
       </points>
+
+
+
+      
+      <group ref = {labelRef}>
+
+      <Html position = {[0, 0.0, 0]}
+                   
+                  >
+                <div className={"planet_text"}
+                    onClick={()=> {
+                      /*
+                      setCameraTarget([0, 1.08, 0])
+                      setCameraPosition([0.02, 1.1, 0.02])
+                      */
+                    }}
+                    
+                    > 
+                      ISS
+                      </div>
+
+      </Html>
+      </group>
 
       {/*
       {interestingSatelliteIndices.map((index, i) => {

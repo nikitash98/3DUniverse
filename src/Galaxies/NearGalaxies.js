@@ -11,8 +11,13 @@ const NearGalaxies = (props) => {
 
     const universePositions = data["positions"]
     const universeDiameters = data["linear_diameter"]
+    const universeColors = []
 
     const uniforms = useMemo(() => ({
+        uDistance: {
+          value: props.distance
+        },
+
         pointTexture: { value: new THREE.TextureLoader().load( 'circle.png' ) }
       }), [])
     
@@ -39,14 +44,24 @@ const NearGalaxies = (props) => {
       });
 
 
+    const colorValues = useMemo(() => {
+      const positions = new Float32Array(universeDiameters.length * 3);
+      universeDiameters.forEach((element, index) => {
+        positions.set([0.2, 0.2, 0.5], index * 3 )
+      });
+      return positions;
+    });
+
     useFrame((state) => {
-      })
+      points.current.material.uniforms.uDistance.value = props.distance;
+    })
 
 
     return (
         <>
       <points ref={points} frustumCulled={false}>
         <bufferGeometry>
+
           <bufferAttribute
             attach="attributes-position"
             count={particlesPosition.length / 3}
@@ -60,6 +75,14 @@ const NearGalaxies = (props) => {
             array={linearDiameterValues}
             itemSize={1}
           />
+
+          <bufferAttribute
+            attach="attributes-color"
+            count={colorValues.length}
+            array={colorValues}
+            itemSize={3}
+          />
+
         </bufferGeometry>
         <shaderMaterial
         fragmentShader={fragmentShader}
@@ -80,23 +103,16 @@ const NearGalaxies = (props) => {
         if(data["linear_diameter"][index] < 15) {
             return
         }
-        /*
-        if(index < Math.min(Math.pow(props.distance, 1.2), 400.0)){
-          return
-        }
-        */
-        if(index < 10 * props.distance){
+        if(index <  props.distance){
           return
 
         }
-        let star_position = [data["positions"][index][0], data["positions"][index][1], data["positions"][index][2]];
+        let star_position = [data["positions"][index][0], data["positions"][index][1]-0.001, data["positions"][index][2] ];
         return (
         <Html center  position = {star_position}>
           <div className={"planet_text"} onClick={()=> {
-
-
-              props.setCameraTarget(star_position)
-              let newCameraPosition = [star_position[0]-0.1, star_position[1], star_position[2]]
+              props.setCameraTarget([star_position[0] * 10.0, star_position[1] * 10.0, star_position[2] * 10.0])
+              let newCameraPosition = [star_position[0] * 10.0- 0.1, star_position[1] * 10.0, star_position[2] * 10.0]
               props.setCameraPosition(newCameraPosition)
               props.setInfoBoxShowing(true)
               props.setInfoBoxTitle(value)

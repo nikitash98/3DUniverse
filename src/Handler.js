@@ -19,18 +19,13 @@ const cameraControlsRef = useRef()
 
 const [autoRotate, setAutoRotate] = useState(true);
 
+const prevSectorRef = useRef(props.sectorValue);
 
 const vec = useRef(new THREE.Vector3(0, 0, 0));
 const timeoutRef = useRef(null);
 
-/*
-const canvas = document.getElementById("canvas");
-const other_GL = canvas.getContext("webgl");
 
-const debugInfo = other_GL.getExtension("WEBGL_debug_renderer_info");
-const vendor = other_GL.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-const renderer = other_GL.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-*/
+
 
 const handleScroll = () => {
   // Do something when scrolling
@@ -41,20 +36,6 @@ const handleScroll = () => {
 useEffect(() => {
   window.addEventListener('mousewheel', handleScroll);
   console.log("added event")
-  /*
-  const controls = cameraControlsRef.current;
-  if (controls) {
-    const stopAutoRotate = () => setAutoRotate(false);
-    controls.addEventListener("control", stopAutoRotate);
-    return () => controls.removeEventListener("control", stopAutoRotate);
-  }
-
-  // Remove the event listener when the component is unmounted
-  return () => {
-    window.removeEventListener('mousewheel', handleScroll);
-  };
-
-  */
   const controls = cameraControlsRef.current;
 
   const stopAutoRotate = () => {
@@ -81,14 +62,6 @@ useEffect(()=> {
 
 
 
-/*
-useEffect(()=> {
-  console.log(data[props.sector].position)
-  vec.current.set(data[props.sector].position[0], data[props.sector].position[1], data[props.sector].position[2], )
-
-  props.set_zoom_to(true)
-}, [props.sector])
-*/
 
 
 
@@ -107,42 +80,71 @@ useEffect(() => {
 
 
 useEffect(()=> {
-  props.setDistance(100)
-
   //cameraControlsRef?.current?.setLookAt(...[0, 100, 0] , ...[0, 0, 0], false);
+
+
+  let maxValue = 1000000
+  if(prevSectorRef.current > props.sectorValue) {
+
+    if(props.sectorValue == 0) {
+      maxValue = 100000000
+    }
+
+    let newCameraPosition = mainCamera.position.divideScalar(mainCamera.position.length()).multiplyScalar(maxValue * 0.85);
+    cameraControlsRef?.current?.setLookAt(...newCameraPosition , ...[0, 0, 0], false);
+
+  } else if(prevSectorRef.current < props.sectorValue) {
+
+    let newCameraPosition = mainCamera.position.divideScalar(mainCamera.position.length()).multiplyScalar(.15);
+    cameraControlsRef?.current?.setLookAt(...newCameraPosition , ...[0, 0, 0], false);
+
+  }
+
+  console.log(props.sectorValue)
+  prevSectorRef.current = props.sectorValue;
+  props.hasRun.current = false;
+
 }, [props.sectorValue])
 
 useFrame((state, delta) => {
   if(state.clock.getElapsedTime() < 0.5) {
     return
   }
-
-  
   let maxValue = 1000000
-    if(mainCamera.position.length() < 0.1) {
-      props.setSectorValue(prevSector => prevSector-1)
-      let newCameraPosition = mainCamera.position.divideScalar(mainCamera.position.length()).multiplyScalar(maxValue * 0.9);
-      cameraControlsRef?.current?.setLookAt(...newCameraPosition , ...[0, 0, 0], false);
+  if(!props.hasRun.current) {
+    let cameraDistance = cameraControlsRef.current?.camera.position.length()
+    if(cameraDistance < 0.1) {
+      props.setSectorValue((prevSector) => {
+        return prevSector-1
+      })
+      props.hasRun.current = true;
     }
 
-    if(mainCamera.position.length() > maxValue) {
-      props.setSectorValue(prevSector => prevSector+1)
-      let newCameraPosition = mainCamera.position.divideScalar(mainCamera.position.length()).multiplyScalar(.15);
-      cameraControlsRef?.current?.setLookAt(...newCameraPosition , ...[0, 0, 0], false);
-
+    if(props.sectorValue == 0) {
+      maxValue = 100000000
     }
 
+    if(props.sectorValue < 2) {
+
+      if(cameraDistance > maxValue) {
+        props.setSectorValue((prevSector) => {
+          return prevSector+1
+        })
+        props.hasRun.current = true;
+      }
+    }
+
+  }
 
 
     if (autoRotate && cameraControlsRef.current) {
       cameraControlsRef.current.azimuthAngle += delta * 0.05; // Adjust speed as needed
       cameraControlsRef.current.update(delta);
     }
-    props.setDistance(mainCamera.position.length())
 
+    props.setDistance(mainCamera.position.length())
     const direction = new THREE.Vector3();
     mainCamera.getWorldDirection(direction);
-
     // Convert to spherical coordinates
     const dec = THREE.MathUtils.radToDeg(Math.asin(direction.y)); // Declination
     const ra = THREE.MathUtils.radToDeg(Math.atan2(direction.x, direction.z)); // Right Ascension

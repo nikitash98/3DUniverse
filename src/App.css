@@ -18,7 +18,7 @@
 body { 
   height: 100%;
   color: white;
-  font-family: 'Helvetica Neue', sans-serif;
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
 
 }
 
@@ -140,139 +140,40 @@ input[type=range][orient=vertical] {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-.customSlider {
-  /* max width of your slider */
-  /* Optional: Only If you want to center your slider in the page */
-  margin: auto;
-  pointer-events: auto;
-  top: 25px;
-  height: 30px;
-  height: 100%;
-}
-.tick_label_top {
-  top: -20px;
-  width: 120px;
-  text-align: center;
-  position: relative;
-  transform: translate(-40%, 0%);
-  color:black
-}
-
-.selected_tick {
-  color: white
-}
-
-.customSlider-track {
-  /* Top value to align your track to the center of your thumb */
-  top: -1.5px;
-  /* thickness of the track */
-  height: 100%;  
- /* default color of your track */
-  background: var(--track-color);
-}
-
-.customSlider-track.customSlider-track-0 {
-  /* color of the track before the thumb */
-  background: var(--main-color);
-  border-radius: 0px;
-
-}
-
-.customSlider-mark {
+.default_button {
+  background: none;
+  border: none;
+  color:var(--dark-grey);
   cursor: pointer;
-  top: -4px;
-  width: 8px;
-  height: 8px;
-  left: -4p;
-  border-radius: 20px;
-  background-color: var(--mark-color);
+  padding: 0px
 }
 
-.selected_mark{
-  background-color: var(--track-color);
+.default_button:active{
+  color: red;
 }
-.customSlider-mark:hover {
-  background-color: var(--hover_blue);
+.default_button:hover {
+  color: var(--light-grey);
 }
+.default_button img {
+  width: 25px;
+  filter: invert(50%) sepia(100%) saturate(0%) hue-rotate(136deg) brightness(112%) contrast(100%);
 
-.customSlider-mark:hover .tick_label_top {
-  color: var(--hover_blue);
-}
-.slider__labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 15px;
-  position: relative;
-  height: 30px;
-  width: 100%;
-}
 
-.slider__labels-label {
-  text-align: left;
-  font-size: 12pt;
-  font-weight: bold;
-  box-sizing: border-box;
-  pointer-events: auto;
-  
 }
 
 
 
-.custom_slider_container {
-  padding: 0px;
-  padding-right: 60px;
+
+.bottomCreditContainer {
+  position: absolute;
   bottom: 0px;
-  top: 40%;
-  position: relative;
-}
-
-
-@media only screen and (max-width: 768px)  {
-  .tick_label_top {
-    font-size: 7pt;
-  }
-
-  .custom_slider_container {
-    display: none;
-  }
-}
-
-.controls-container {
-  padding-top: 10%;
-
-}
-.controls-container h1{
-  font-weight: 300;
-  font-size: 30pt;
-  margin: 0%;
-  border: solid 1px white;
-  margin: 10px;
-}
-.controls-container h2 {
-  font-weight: 400;
-  margin: 0%;
-  font-size: 12pt;
   text-align: left;
-}
-.lab {
-  cursor: pointer;
-
-}
-.slider__labels-label:hover {
-  color:red
+  width: 100%;
+  pointer-events: auto;
 }
 
-.slider_mark {
-  font-size: 8pt;
-}
+
+
+
+
+

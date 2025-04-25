@@ -24,7 +24,7 @@
     pointer-events: auto;
   }
   a {
-    color: grey;
+    color: var(--dark-grey);
   }
 
   .classic_icon {
@@ -62,20 +62,20 @@
 
   .toggle_button {
     background: none !important;
-    color: grey !important;
+    color: var(--dark-grey) !important;
     padding: 0px !important;
   }
   .ui.button.toggle.active:hover{
     background: none !important;
-    color: white !important;
+    color: var(--medium-grey) !important;
   }
   .ui.button.toggle:hover {
-    color: white !important;
+    color: var(--medium-grey) !important;
   }
 
   .ui.button.toggle.active, .ui.buttons .button.toggle.active, .ui.toggle.buttons .active.button {
     background: none !important;
-    color: white !important;
+    color: var(--medium-grey) !important;
   }
 .testbutton {
   border: none;
@@ -93,7 +93,7 @@
 
   .inline_button img {
     width: 15px;
-    filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(136deg) brightness(112%) contrast(100%);
+    filter: invert(50%) sepia(100%) saturate(0%) hue-rotate(136deg) brightness(112%) contrast(100%);
 
   }
 
@@ -101,13 +101,60 @@
     display: inline-block;
     background: none;
     border: none;
+    cursor: pointer;
+    
   }
 
+.inline_button:hover img {
+  filter: invert(100%) sepia(100%) saturate(0%) hue-rotate(136deg) brightness(112%) contrast(100%);
+
+}
   .guided_text {
-    color: white;
-    font-size: 20pt;
+    color: var(--medium-grey);
+    font-size: 15pt;
     display: inline-block;
-    font-weight: 200;
-    font-family: 'Helvetica Neue', sans-serif;
+    font-weight: 100;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
     padding: 20px;
+    
+  }
+
+  .guidedSectionContainer {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #01010160;
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+    box-shadow: 0 0 10px 10px #01010160;
+
+    
+  }
+
+  .guidedSectionContainer > * {
+    pointer-events: auto;
+  }
+
+
+  .coordinate_text {
+    color: var(--dark-grey)
+  }
+
+  .credit_text {
+    color: var(--dark-grey) !important;
+  }
+
+  .hide_ui_button {
+    color: var(--dark-grey) !important;
+  }
+
+
+  .show_ui_container {
+    position: absolute;
+    left: 0px;
+    padding: 10px;
+    bottom: 0px;
+    pointer-events: auto;
   }

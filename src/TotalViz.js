@@ -1,11 +1,10 @@
 
-import SolarSystem from './SolarSystem';
-import { Solar_System_Broken } from './Solar_System_Broken.js';
+import SolarSystem from './SolarSystem/SolarSystem';
 import MilkyWay from './MilkyWay';
 import ReactSlider from "react-slider";
 import { Canvas} from '@react-three/fiber'
 import { Stats, OrbitControls, TrackballControls, Box, Sphere, Line} from '@react-three/drei'
-import { Suspense, useState } from 'react';
+import { Suspense, useState, useRef } from 'react';
 import data from "./sectorinfo.json"
 import Overlay from './Overlay/Overlay.js';
 
@@ -17,7 +16,6 @@ import Stars from "./Stars/Stars.js"
 import UniverseThree from './Galaxies/UniverseThree.js';
 import Satellites from './Satellites/Satellites.js';
 import CMB from './CMB';
-import Earth_P from "./3D/Earth.jsx"
 import TestPoints from './TestPoints.js';
 import * as Constants from "./constants.jsx"
 import { BackgroundScene } from './3D/Background.js';
@@ -28,16 +26,14 @@ import Handler from './Handler.js';
 import { Grid, Html } from '@react-three/drei';
 import TexturedSphere from './3D/TexturedSphere.js';
 import MilkyWaySphere from './3D/MilkyWaySphere.js';
-import Moon from './3D/Moon.js';
-import Sun from './3D/Sun.js';
 import { CheckGPULimits } from './CheckGPULimits.js';
 import RADECGrid from './3D/DecGrid.js';
-import { ISS } from './3D/ISS.jsx';
 import Satellites_02 from './Satellites/Satellites_02.js';
 import * as THREE from 'three';
 import NearGalaxies from './Galaxies/NearGalaxies.js';
 import SDSSGalaxies from './Galaxies/SDSSGalaxies.js';
 import Compass from './3D/Compass.js';
+import MilkyWayPlane from './3D/MilkyWayPlane.js';
 
 const TotalViz = (props) => {
 
@@ -49,6 +45,7 @@ const TotalViz = (props) => {
     const [sector, setSector] = useState("Earth");
     const [showSectorInfo, setShowSectorInfo] = useState(true)
     const [zoom_to, set_zoom_to] = useState(false)
+
 
 
     const [guidedSection, setGuidedSection] = useState(0)
@@ -71,13 +68,17 @@ const TotalViz = (props) => {
 
     const [labelsVisible, setLabelsVisible] = useState(false)
 
+    const hasRun = useRef(false);
+
     const spiralPoints = [
       new THREE.Vector3(0, 0, 0),
       new THREE.Vector3(200, 0, -200),
-      new THREE.Vector3(800, 0, -100),
-      new THREE.Vector3(1200, 0, 400),
-      new THREE.Vector3(1300, 0, 900),
-      new THREE.Vector3(1200, 0, 1200),
+      new THREE.Vector3(360, 0, -250),
+
+      new THREE.Vector3(700, 0, -100),
+      new THREE.Vector3(1000, 0, 400),
+      new THREE.Vector3(900, 0, 600),
+      new THREE.Vector3(800, 0, 800),
   
     ];
   
@@ -110,120 +111,68 @@ const TotalViz = (props) => {
         </div>
 
         <div id="canvas-container">
-            <Canvas camera={{ position: [Math.sqrt(start_dist), 0, Math.sqrt(start_dist)], near: 0.0001, far: 2000000}} shadows>
+            <Canvas camera={{ position: [Math.sqrt(start_dist), 0, Math.sqrt(start_dist)], near: 1.0, far: 2000000000}} shadows>
               <CheckGPULimits/>
               <ambientLight intensity={0.01} />
-              <directionalLight intensity={1} color="white" position={[0, 10, 10]}  castShadow/>
+              <directionalLight intensity={1} color="white" position={[10, 0, 0]}  castShadow/>
               {/*
               <Compass/>
               */}
 
 
-            {(sectorValue == 0) &&
-            <Suspense fallback = {<Box/>}>
-
+            {(sectorValue == 0 && !hasRun.current) &&
+            <Suspense fallback = {<>
+            </>}>
               <>
+
+              {distance < 100 && (
               <Satellites_02/>
+              )}
+              {distance < 50000000 && (
+                <group scale={1}>
+                  <SolarSystem 
+                  setCameraPosition = {setCameraPosition}
+                  setCameraTarget = {setCameraTarget}
+                  distance = {distance}/>
+                </group>
+              )}
+      
 
+              {/*
+              <TexturedSphere distance_percentage = {distance/5000000}/>
+              */}
 
-
-              <group scale={1}>
-                <Earth_P setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}/>
-                <Ecliptic xRadius={60} zRadius = {60}/>
-                <group position={[0, 1.08, 0]} scale={0.0001}>
+               </>
+              {distance > 50000000 && (
+                <>
+                  <Sphere args={[500000, 32, 32]}>
+                        <meshBasicMaterial transparent/>
+                  </Sphere>
                   
-                <ISS/>
-                <Html center position={[0,-1,0 ]}>
-                    <div className={"planet_text"}
-                    onClick={()=> {
-                      setCameraTarget([0, 1.08, 0])
-                      setCameraPosition([0.02, 1.1, 0.02])
-                    }}
-                    > 
-                      ISS
+                  <Html center position={[0,-.25,0 ]}>
+                    <div className={"planet_text"} onClick={()=> {
+                              props.setCameraTarget([60, 0, 0])
+                              props.setCameraPosition([61, 0.2, 0.5])
+                          }}> 
+                        Sun
                     </div>
-                </Html>
-              
-                </group>
-
-                <group position={[60, 0, 0]}>
-                  <Moon setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}/>
-                </group>
-
-
-                <group position={[23544, 0, 0]}>
-                  <Ecliptic xRadius={23544.1845864} zRadius = {23544.1845864}/>
-                  <Sun setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}/>
-                </group>
-
-
-                <group position={[23544, 0, 0]}>
-                  <Ecliptic xRadius={9093 } zRadius = {9093}/>
-                
-                    <group position={[9093, 0, 0]}>
-                      <Moon setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}/>
-                    </group>
-
-                </group>
-
-                <group position={[23544, 0, 0]}>
-                  <Ecliptic xRadius={16923} zRadius = {16923}/>
-                  <group position={[16923, 0, 0]}>
-                    <Moon setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}/>
-                  </group>
-
-                </group>
-
-                <group position={[23544, 0, 0]}>
-                  <Ecliptic xRadius={35868} zRadius = {35868}/>
-                  <group position={[35868, 0, 0]}>
-                    <Moon setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}/>
-                  </group>
-
-                </group>
-                <group position={[23544, 0, 0]}>
-                  <Ecliptic xRadius={122253} zRadius = {122253}/>
-                  <group position={[122253, 0, 0]}>
-                    <Moon setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}/>
-                  </group>
-
-                </group>
-                <group position={[23544, 0, 0]}>
-                  <Ecliptic xRadius={224804} zRadius = {224804}/>
-                  <group position={[224804, 0, 0]}>
-                    <Moon setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}/>
-                  </group>
-
-                </group>
-                <group position={[23544, 0, 0]}>
-                  <Ecliptic xRadius={454660} zRadius = {454660}/>
-                  <group position={[454660, 0, 0]}>
-                    <Moon setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}/>
-                  </group>
-
-                </group>
-                <group position={[23544, 0, 0]}>
-                  <Ecliptic xRadius={732508} zRadius = {732508}/>
-                  <group position={[732508, 0, 0]}>
-                    <Moon setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}/>
-                  </group>
-
-                </group>
-
-
-              </group>
-
-              <TexturedSphere distance_percentage = {distance/1000000}/>
+                  </Html>
                 </>
+              )}
+              <TexturedSphere distance_percentage = {0.2}/>
             </Suspense>
 
             } 
-            {(sectorValue == 1) &&
+
+            
+            {(sectorValue == 1 && !hasRun.current) &&
               <Suspense fallback = {
                 <Box/>
               }>
-            
-            <>
+              <>
+
+              {distance < 500 &&  (
+
                 <Stars 
                 star_distance = {star_distance} 
                 distance = {distance}  
@@ -233,74 +182,234 @@ const TotalViz = (props) => {
                 labelsVisible = {labelsVisible}
                 setInfoBoxTitle = {setInfoBoxTitle}
                 />
+              )}
+
+                <Sphere args={[0.001, 32, 32]}>
+                      <meshBasicMaterial/>
+                </Sphere>
+
+                {distance < 500 && (
+                  <Html center position={[0, 0, 0]}>
+                      <div className={"planet_text"} onClick={()=> {
+                                props.setCameraTarget([60, 0, 0])
+                                props.setCameraPosition([61, 0.2, 0.5])
+                            }}> 
+                          Sun
+                      </div>
+                  </Html>
+                )}
+
                 <group position={[-34.16581651681187, -271.4933873379488, -488.5939393949807]}>
-
-
                   <group position={[0, 0, 0]} rotation = {[0, 0, 1.1]}>
-                    <group position={[0, -15.6, 0]}>
-                     <Ecliptic xRadius={1134.27185637} zRadius = {1134.27185637}/>
-                    </group>
-                    <group position={[0, 15.6, 0]}>
-                     <Ecliptic xRadius={1134.27185637} zRadius = {1134.27185637}/>
-                    </group>
+                    {distance > 5000 && (
 
-                    <lineSegments>
-                      <edgesGeometry args={[new THREE.SphereGeometry(100, 16, 16)]} />
-                      <lineBasicMaterial color="#333333" linewidth={0.1} opacity={0.5} transparent/>
-                    </lineSegments>
+                    <MilkyWayPlane
+                      distance = {distance * 0.5}
+                    />
+                    )}
 
-                    <Line points = {spiralPoints} lineWidth={1.0} color="#333333"/>
+                      {distance > 1200000 && (
+                      
+                        <Sphere args={[10000, 32, 32]}>
+                              <meshBasicMaterial transparent/>
+                        </Sphere>
+                      )}
+                    
+                    {distance > 12000 && (
+                      <Html center position={[-1100,1,0 ]}>
+                          <div className={"planet_text"} onClick={()=> {
+                                    props.setCameraTarget([60, 0, 0])
+                                    props.setCameraPosition([61, 0.2, 0.5])
+                                }}> 
+                              Milky Way
+                          </div>
+                      </Html>
+                      )}
 
+                    {distance > 200 && distance < 25000 && (
+                    <>
+                      <group position={[0, -15.6, 0]}>
+                      <Ecliptic xRadius={1134.27185637} zRadius = {1134.27185637}/>
+                      </group>
+
+                      <group position={[0, 15.6, 0]}>
+                      <Ecliptic xRadius={1134.27185637} zRadius = {1134.27185637}/>
+                      </group>
+
+                      <lineSegments>
+                        <edgesGeometry args={[new THREE.SphereGeometry(100, 12, 12)]} />
+                        <lineBasicMaterial color="#111111" linewidth={0.1} opacity={1.0} transparent/>
+                      </lineSegments>
+                      <Line points = {spiralPoints} lineWidth={1.0} color="#111111"/>
+
+
+                      {distance < 3000 && (
+                        <>
+
+                        <Html position={[-80,0,0 ]}
+                        rotation = {[-Math.PI/2, 0, 0]}
+                        scale={200}
+                        center
+                        transform
+        
+                        >
+                          <div className={"annotation_text"}
+                            onClick={()=> {
+                              setCameraTarget([0, 1.08, 0])
+                              setCameraPosition([0.02, 1.1, 0.02])
+                            }}
+                          > 
+                            center of galaxy
+                          </div>
+                        </Html>
+
+                        <Html position={[800,0,0 ]}
+                          rotation = {[-Math.PI/2, 0, 0]}
+                          scale={200}
+                          center
+                          transform
+                        
+                        
+                        >
+                          <div className={"annotation_text"}
+                          rotation = {[-Math.PI/2, 0, 0]}
+                          scale={200}
+                          center
+                          transform
+                          > 
+                            Perseus Arm
+                          </div>
+                        </Html>
+
+                        <Html position={[-800,0,0 ]}
+                        
+                        rotation = {[-Math.PI/2, 0, 0]}
+                        scale={200}
+                        center
+                        transform
+>
+                          <div className={"annotation_text"}
+                            onClick={()=> {
+                              setCameraTarget([0, 1.08, 0])
+                              setCameraPosition([0.02, 1.1, 0.02])
+                            }}
+                          > 
+                            Outer Arm
+                          </div>
+                        </Html>
+
+
+                        <Html  position={[-400,0,-400 ]}
+                          rotation = {[-Math.PI/2, 0, 0]}
+                          scale={200}
+                          center
+                          transform
+                        
+                        >
+                          <div className={"annotation_text"}
+                            onClick={()=> {
+                              setCameraTarget([0, 1.08, 0])
+                              setCameraPosition([0.02, 1.1, 0.02])
+                            }}
+                          > 
+                            Sagitarius Arm
+                          </div>
+                        </Html>
+
+
+                        <Html position={[500,0,500 ]}
+                        
+                        rotation = {[-Math.PI/2, 0, 0]}
+                        scale={200}
+                        center
+                        transform
+>
+                          <div className={"annotation_text"}
+                            onClick={()=> {
+                              setCameraTarget([0, 1.08, 0])
+                              setCameraPosition([0.02, 1.1, 0.02])
+                            }}
+                          > 
+                            Scutum-Centaurus Arm
+                          </div>
+                        </Html>
+
+                        </>
+                      )}
+                    </>
+                    
+                    )}
                   </group>
-                  <Html center position={[0,-100,0 ]}>
-                    <div className={"planet_text"}
-                      onClick={()=> {
-                        setCameraTarget([0, 1.08, 0])
-                        setCameraPosition([0.02, 1.1, 0.02])
-                      }}
-                    > 
-                      center of galaxy
-                    </div>
-                </Html>
-
 
                   </group>
 
                 
-                <MilkyWaySphere percentage_away = {Math.min(distance/500.0, 1.0)}/>
+                {/*
+                {distance < 1.0 ? (
+
+                  <TexturedSphere distance_percentage = {1.0-distance}/>
+                ) :
+                (
+                  <MilkyWaySphere percentage_away = {Math.min(distance/100.0, 1.0)}/>
+
+                )
+              }
+                  
+                */}
 
 
-            </>
+              </>
             </Suspense>
-
             }
-            {(sectorValue == 2) &&
+            {(sectorValue == 1 && sectorValue == 0) && (
+            <TexturedSphere distance_percentage = {(1.0 - (distance * !hasRun.current)) * 0.2}/>
+
+            )}
+
+            {(sectorValue == 2 && !hasRun.current) &&
             <Suspense fallback = {
-              <Box/>
+              <>
+              </>
             }>
 
             <>
-              {/*
-              */}
+              <group scale={100.0}>
+                <SDSSGalaxies
+                  distance = {distance}  
 
-              <SDSSGalaxies/>
-              <NearGalaxies
-              distance = {distance}  
-              setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}
-              setInfoBoxShowing  = {setInfoBoxShowing}
-              labelsVisible = {labelsVisible}
-              setInfoBoxTitle = {setInfoBoxTitle}
-              />
-              {/*
-              <UniverseThree count={1000} shape="sphere" universe_distance = {universe_distance} distance = {distance} />
-              */}
+                />
+                <NearGalaxies
+                distance = {distance}  
+                setCameraTarget = {setCameraTarget} setCameraPosition = {setCameraPosition}
+                setInfoBoxShowing  = {setInfoBoxShowing}
+                labelsVisible = {labelsVisible}
+                setInfoBoxTitle = {setInfoBoxTitle}
+                />
 
-              <CMB percentage_away = {Math.min(distance/500000.0, 1.0)}/>
+              </group>
 
-            <group position={[0, 0, 0]} rotation = {[0, 0, 1.1]}>
-              <Ecliptic xRadius={0.2} zRadius = {0.2}/>
+              {distance < 5000 && (
+                <>
+                  <Sphere args={[0.001, 32, 32]}>
+                        <meshBasicMaterial transparent/>
+                  </Sphere>
+                  
+                  <Html center position={[0,-.001,0 ]}>
+                    <div className={"planet_text"} onClick={()=> {
+                              props.setCameraTarget([60, 0, 0])
+                              props.setCameraPosition([61, 0.2, 0.5])
+                          }}> 
+                        Milky Way
+                    </div>
+                  </Html>
+                </>
+              )}
 
-            </group>
+                <CMB percentage_away = {Math.min(distance/500000.0, 1.0)}/>
+
+                <group position={[0, 0, 0]} rotation = {[0, 0, 1.1]}>
+                  <Ecliptic xRadius={0.2} zRadius = {0.2}/>
+                </group>
 
               </>
 
@@ -333,6 +442,7 @@ const TotalViz = (props) => {
               cameraTarget = {cameraTarget}
               setSectorValue = {setSectorValue}
               setRaDec = {setRaDec}
+              hasRun = {hasRun}
               />
             </Canvas>
         </div>

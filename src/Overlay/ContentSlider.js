@@ -35,12 +35,15 @@ const ContentSlider = (props) => {
                                     </div>
                                 </span>;
                                 */
-                               return <span {...props}>
-                                    <div className='small_text slider_label_text '>
-                                        {sectorTitles[props.key/33]} 
+                               return <>
 
-                                    </div>
-                               </span>
+                                        <div {...props} className='slider_label_text '>
+                                            {sectorTitles[props.key/33]} 
+                                        </div>
+
+                                <div {...props} key={props.key + 1}>
+                                </div>
+                               </>
                             }}
                             className="customSlider"
                             trackClassName="customSlider-track"

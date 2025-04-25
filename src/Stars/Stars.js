@@ -126,7 +126,7 @@ const Stars = (props) => {
         uniforms={uniforms}
         vertexColors= {true}
         transparent = {true}
-      />
+        />
       </points>
 
       {data["proper"].map((value, index) =>  {
@@ -136,16 +136,20 @@ const Stars = (props) => {
         if(index < Math.min(Math.pow(props.distance, 1.2), 400.0)){
           return
         }
-        let star_position = [data["proper_positions"][index][0] * star_mult, data["proper_positions"][index][2] * star_mult, data["proper_positions"][index][1] * star_mult];
+        let star_position = [data["proper_positions"][index][0] * star_mult, data["proper_positions"][index][2] * star_mult - data["magnitude"][index] * 10.0, data["proper_positions"][index][1] * star_mult];
         return (
-        <Html center  position = {star_position}>
-          <div className={"planet_text"} onClick={()=> {
-              props.setCameraTarget(star_position)
-              let newCameraPosition = [star_position[0]-2, star_position[1], star_position[2]]
-              props.setCameraPosition(newCameraPosition)
-              props.setInfoBoxShowing(true)
-              props.setInfoBoxTitle(value)
-          }}>  
+        <Html center position = {star_position}>
+          <div key={value} 
+              className={"planet_text"} 
+              onClick={()=> {
+                props.setCameraTarget(star_position)
+                let newCameraPosition = [star_position[0]-2, star_position[1], star_position[2]]
+                props.setCameraPosition(newCameraPosition)
+                props.setInfoBoxShowing(true)
+                props.setInfoBoxTitle(value)
+              }}
+              style = {{"opacity" : Math.min(props.distance/10.0, 0.5)}}
+          >  
             {value}
           </div>
         </Html>
@@ -161,10 +165,11 @@ const Stars = (props) => {
         }
         return (
           <Line
+          key = {key}
           points={constellationdata[key]["points"]} // Array of points
           color="white" // Line color
           lineWidth={1 * (1.0 - Math.pow((props.distance/200), 0.5))} // Line width
-          opacity={0.1 * (1.0 - Math.pow((props.distance/200), 0.5))}
+          opacity={Math.max((Math.min(props.distance - 0.3, 1.0)) * 0.1 * (1.0 - Math.pow((props.distance/200), 0.5)), 0.0)}
           transparent
         />
   

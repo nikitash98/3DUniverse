@@ -4,10 +4,12 @@
     /* Optional: Only If you want to center your slider in the page */
     margin: auto;
     pointer-events: auto;
-    top: 25px;
     overflow: hidden;
     text-align: center;
     align-items: center;
+    height: 100%;
+
+    position: relative;
 
   }
   .tick_label_top {
@@ -34,7 +36,7 @@
    /* default color of your track */
     background: var(--dark-grey);
     overflow: hidden;
-    left: 50%;
+    right: 1px;
   }
   
   .customSlider-track.customSlider-track-0 {
@@ -43,20 +45,18 @@
     border-radius: 0px;
   }
   .customSlider-thumb {
-    left: 50%;
-    width: 20px;
+    right: 1px;
+    width: 5px;
     height: 1px;
     background-color: var(--light-grey);
-    transform: translate(-50%, 0);
   }
   .customSlider-mark {
     cursor: pointer;
     width: 10px;
     height: 1px;
-    background-color: grey;
-    transform: translate(-50%, 0%);
+    background-color: var(--dark-grey);
+    right: 1px;
   }
-
 
   .end_mark {
     border: solid 2px var(--track-color);
@@ -116,8 +116,16 @@
  
   .slider_label_text {
     position: absolute;
-    left: -50px;
     text-align: right;
+    right: 10px;
     text-wrap: nowrap;
-    color: var(--medium-grey);
+    color: var(--dark-grey);
+    font-size: 8pt;
+    transform: rotate(-90deg);
+    cursor: pointer;
+  }
+
+  .slider_label_text:hover {
+    color: white;
+    cursor: pointer;
   }

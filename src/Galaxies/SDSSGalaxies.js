@@ -12,6 +12,9 @@ const SDSSGalaxies = (props) => {
     const universePositions = data["positions"]
     const universeColors = data["colors"]
     const uniforms = useMemo(() => ({
+        uDistance: {
+          value: props.distance
+        },
         pointTexture: { value: new THREE.TextureLoader().load( 'circle.png' ) }
       }), [])
     let multValue = 1
@@ -32,7 +35,7 @@ const SDSSGalaxies = (props) => {
         const positions = new Float32Array(universePositions.length);
   
         universePositions.forEach((element, index) => {
-            positions[index] = 10;          
+            positions[index] = 100;          
           });
         return positions;
       });
@@ -48,9 +51,14 @@ const SDSSGalaxies = (props) => {
 
 
 
+      useFrame((state) => {
+        points.current.material.uniforms.uDistance.value = props.distance;
+      })
+  
     return (
         <>
-      <points ref={points} frustumCulled={false}>
+      <points ref={points} frustumCulled={false}
+      >
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"

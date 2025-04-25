@@ -1,6 +1,10 @@
+.font_class {
+  font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+
+}
+
 
 .planet_text {
-    color: white;
     user-select: none;
     -webkit-user-select: none; /* Safari */
     -moz-user-select: none; /* Firefox */
@@ -8,12 +12,40 @@
     text-align: center;
     transform: translate(0, +100%);
     background-color: rgba(0, 0, 0, 1.0);
-    padding: 2px;
+    padding: 0px;
     font-size: 10pt;
     max-width: 100px;
     cursor: pointer;
     text-wrap: nowrap;
-    opacity: 0.2;
+    color: var(--medium-grey);
+    box-shadow: 0 0 5px 5px #010101;
+    opacity: 0.5;
+    
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+
+    font-weight: 100;
+
+    
+  }
+
+  .annotation_text {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+
+    user-select: none;
+    -webkit-user-select: none; /* Safari */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* IE/Edge */
+    text-align: center;
+    transform:  rotate(90deg);
+    padding: 0px;
+    font-size: 8pt;
+    font-weight: 100;
+    text-wrap: nowrap;
+    color: var(--medium-grey);
+    opacity: 0.5;
+
+
+
   }
 
   .planet_text:hover {

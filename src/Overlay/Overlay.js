@@ -7,94 +7,164 @@ import { distance } from 'three/src/nodes/TSL.js';
 import InformationBox from './InformationBox.js';
 import { useState } from 'react';
 import ContentSlider from './ContentSlider.js';
+import guidedData from "../guidedStory.json"
 function Overlay(props) {
 
 
     const [uiVisible, setuiVisible] = useState(true)
-
+    const [viewSettings, setViewSettings] = useState(false)
     return (
         <>
 
         
-            <div className='logo'>
-            </div>
             <div className='ui_visible_container'>
             </div>
 
             <Grid style = {{"height": "100%", "margin": "0"}}>
                 {uiVisible && (
                 <>
-                <Grid.Row style= {{"height": "10%"}}>
-                    <Grid.Column width={2}>
-                    <img src="Logo.svg"/>
-                    </Grid.Column >
 
-                    <Grid.Column width={2} floated= "right" style = {{"pointer-events": "auto", "text-align": "right"}}>
-
-
+                <Grid.Row centered style= {{"height": "100%"}}>
+                     <Grid.Column width={2}>
+                        <img src="Logo.svg"/>
                         {/*
-                        <Button 
-                        className='toggle_button'
-                        toggle
-                        active = {props.radecGrid}
-                        onClick={()=> {props.setradecGrid((prev) => !prev)}}
-                        > celestial grid</Button>
-                        <br/>
-
-                        <Button 
-                        className='toggle_button'
-                        toggle
-                        active = {props.radecGrid}
-                        onClick={()=> {props.setradecGrid((prev) => !prev)}}
-                        > guided</Button>
-                        <br/>
-
-                        <Button 
-                        className='toggle_button'
-                        toggle
-                        active = {!props.constellationConnections}
-                        onClick={()=> {props.setconstellationConnections((prev) => !prev)}}
-                        >constellations</Button>
-                        <br/>
-
-                        <Button 
-                        className='toggle_button'
-                        toggle
-                        active = {!props.labelsVisible}
-                        onClick={()=> {props.setLabelsVisible((prev) => !prev)}}
-                        > labels</Button>
-
                         */}
+                        
+                        <div className='bottomCreditContainer'>
 
-                    </Grid.Column>
-                </Grid.Row>
-                <Grid.Row centered style= {{"height": "70%"}}>
-                    <Grid.Column width={4}>
-                    </Grid.Column>
+                                <Button 
+                                className='toggle_button'
+                                toggle
+                                    active = {viewSettings}
+                                    onClick={()=> {setViewSettings((prev) => !prev)}}
+                                    > view settings
+                                </Button>     
 
-                    <Grid.Column width={8} >
-                        <button className='inline_button' onClick={()=> {
-                            props.setGuidedSection(0)
-                        }
+                            {viewSettings && (
 
-                        }>
-                            <img src='icons/left-thin.svg'/>
-                        </button>
-                        <div className='guided_text'>
+                            <div>
 
-                            This is earth. You are here
+                                <Divider/>
 
+                                    <Button 
+                                    className='toggle_button'
+                                    toggle
+                                        active = {props.radecGrid}
+                                        onClick={()=> {props.setradecGrid((prev) => !prev)}}
+                                        > celestial grid
+                                    </Button>
+
+                                    <br/>
+                                    <Button 
+                                    className='toggle_button'
+                                    toggle
+                                        active = {props.radecGrid}
+                                        onClick={()=> {props.setradecGrid((prev) => !prev)}}
+                                    > guided</Button>
+                                    <br/>
+
+                                    <Button 
+                                    className='toggle_button'
+                                    toggle
+                                    active = {!props.constellationConnections}
+                                    onClick={()=> {props.setconstellationConnections((prev) => !prev)}}
+                                    >constellations</Button>
+                                    <br/>
+
+                                    <Button 
+                                    className='toggle_button'
+                                    toggle
+                                    active = {!props.labelsVisible}
+                                    onClick={()=> {props.setLabelsVisible((prev) => !prev)}}
+                                    > labels</Button>
+                                <Divider/>
+                            </div>
+                            )}
+                            <div className='small_text credit_text'>
+                                credits | <button toggle
+                                    className='default_button'
+                                    active = {uiVisible}
+                                    onClick={()=> {setuiVisible((prev) => !prev)}}
+                                    > hide ui</button>
+                                    <br/>
+
+                                © <a href="https://menard.pha.jhu.edu/" target="_blank">Ménard</a> and <a href="https://nikitashtarkman.com/" target="_blank">Shtarkman </a>
+                            </div>
+                            
                         </div>
 
-                        <button className='inline_button' onClick={
-                            props.setGuidedSection(1)
+                    </Grid.Column >
+                    <Grid.Column width={2}>
+                    </Grid.Column>
+                    <Grid.Column width={8}  style={{"textAlign": "center"}}>
+                        <div className='small_text coordinate_text' style={{"textAlign": "center"}}>
 
-                        }>
-                            <img src='icons/right-thin.svg'/>
-                        </button>
+                        {props.sectorValue == 0 && (
+                            <>
+                                {(props.distance/100.0).toFixed(0)} AU
+                            </>
+                        )
+                        }
+                        {props.sectorValue == 1 && (
+                            <>
+                                {(props.distance * 1.0/0.7 * 10.0).toFixed(0)} Parsecs
+                            </>
+                        )
+                        }
+
+                        {props.sectorValue == 2 && (
+                            <>
+                                {(props.distance).toFixed(0)} Mpc
+                            </>
+                        )
+                        }
+                        <br/>
+                            {props.raDec[0].toFixed(1)} {props.raDec[1].toFixed(1)}
+                        </div>
+
+                        {true && (
+
+                            <Button className='classic_icon'
+                                    onClick={()=> {
+                                        props.setCameraTarget([0, 0, 0])
+                                    }
+                                }>
+                                <img src='icons/Material_Symbol_Recenter_02.svg'/>
+                                <br/>
+
+                                <div className='small_text' style={{"textAlign": "center", "color": "grey"}}>
+                                    recenter
+                                </div>
+                            </Button>
+                            )}
+
+                        <div className='guidedSectionContainer'>
+                            <button className='inline_button' onClick={()=> {
+                                props.setGuidedSection(0)
+                            }
+
+                            }>
+                                <img src='icons/left-thin.svg'/>
+                            </button>
+                            <div className='guided_text'>
+
+                                {guidedData[props.guidedSection]["caption"]}
+                            </div>
+
+                            <button className='inline_button' onClick={ ()=>{
+
+                                props.setGuidedSection(1)
+                            }
+
+
+                            }>
+                                <img src='icons/right-thin.svg'/>
+                            </button>
+                        </div>
 
                     </Grid.Column>
-                    <Grid.Column width={3} >
+                    <Grid.Column width={3} style = {{"textAlign": "right"}}>
+
                         {props.infoBoxShowing && (
 
                         <InformationBox setInfoBoxShowing = {props.setInfoBoxShowing}
@@ -106,103 +176,36 @@ function Overlay(props) {
                     </Grid.Column>
 
                     <Grid.Column width={1} floated= "right">
-                    <div className='small_text' style={{"textAlign": "center", "text-wrap": "nowrap"}}>
-
-                        {props.sectorValue == 0 && (
-                            <p>
-                                {(props.distance).toFixed(0)} Earth Radii
-                            </p>
-                        )
-                        }
-                        {props.sectorValue == 1 && (
-                            <p>
-                                {(props.distance * 1.0/0.7 * 10.0).toFixed(0)} Parsecs
-                            </p>
-                        )
-                        }
-
-                        {props.sectorValue == 2 && (
-                            <p>
-                                {(props.distance).toFixed(0)} Mpc
-                            </p>
-                        )
-                        }
-
-
-                    </div>
 
                         <div style={{width:"100%", height:"100%"}}>
-
-                        <ContentSlider 
-                        distance = {props.distance}
-                        sectorValue = {props.sectorValue}
-                        setSectorValue = {props.setSectorValue}
-                        setCameraPosition = {props.setCameraPosition}
-                        />
+                            <ContentSlider 
+                            distance = {props.distance}
+                            sectorValue = {props.sectorValue}
+                            setSectorValue = {props.setSectorValue}
+                            setCameraPosition = {props.setCameraPosition}
+                            />
                         </div>
-                </Grid.Column>
-                </Grid.Row>
-                <Grid.Row verticalAlign="bottom" centered style= {{"height": "10%"}}>
-                    <Grid.Column width={4} style = {{"textAlign" : "center"}}>
-                        {/*
-                        {(props.distance/500.0).toFixed(0)} Parsecs
-                        <br/>
-                        </div>
-                        */}
-                        {true && (
-
-                        <Button className='classic_icon'
-                        
-                                onClick={()=> {
-
-                                    props.setCameraTarget([0, 0, 0])
-                                }
-                        }>
-                            <img src='icons/Material_Symbol_Recenter_02.svg'/>
-                            <br/>
-
-                            <div className='small_text' style={{"textAlign": "center", "color": "grey"}}>
-                                recenter
-                            </div>
-                        </Button>
-                        )}
-
                     </Grid.Column>
-
                 </Grid.Row>
                 </>
 
                 )}
+           
 
-                <Grid.Row verticalAlign="bottom" style = {{"height": "10%"}}>
-                    <Grid.Column width={4} verticalAlign='bottom'>
-                        <div className='small_text' style={{"textAlign": "left", "color": "grey", "pointer-events" : "auto"}}>
-                        © <a href="https://menard.pha.jhu.edu/" target="_blank">Ménard</a> and <a href="https://nikitashtarkman.com/" target="_blank">Shtarkman </a>
-                        </div>
-                    </Grid.Column>
-
-                    <Grid.Column width={8}>
-                        <div className='small_text' style={{"textAlign": "center"}}>
-                            {props.raDec[0].toFixed(1)} {props.raDec[1].toFixed(1)}
-                        </div>
-                    </Grid.Column>
-                    <Grid.Column width={4} verticalAlign="bottom" floated= "right" style = {{"pointer-events" : "auto"}}>
-                        <div className='small_text' style={{"textAlign": "right", "color": "grey"}}>
-                            credits |                 <Button toggle
-                            className='toggle_button'
-
-                            active = {uiVisible}
-                            onClick={()=> {setuiVisible((prev) => !prev)}}
-                            > hide ui</Button>
-
-                        </div>
-
-                    </Grid.Column>
-
-                </Grid.Row>
             </Grid>
 
-            
+        {!uiVisible && (
+
+        <div className='show_ui_container'>
+
+            <button toggle
+                className='default_button'
+                active = {uiVisible}
+                onClick={()=> {setuiVisible((prev) => !prev)}}
+            > show ui</button>
+        </div>
+        )}
+
         </>
 
     )

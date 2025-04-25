@@ -3,7 +3,7 @@
         "title": "Earth",
         "cameraPosition": [0, 0, 0],
         "cameraTarget": [0, 0, 0],
-        "caption": "This is a test caption"
+        "caption": "This is our planet surrounded by 8200 satellites. Scroll back on the mousewheel to zoom out."
     },
     {
         "title": "ISS",

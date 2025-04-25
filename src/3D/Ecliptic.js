@@ -27,8 +27,7 @@ export function Ecliptic({ xRadius = 1, zRadius = 1 }) {
         <Line points = {points} 
         onPointerOver={() => {setLineWidth(4)}}
         onPointerOut={() => setLineWidth(2)}
-        
-        lineWidth={lineWidth} color="#222222"/>
+        lineWidth={lineWidth} color="#111111"/>
         </>
 
     );
