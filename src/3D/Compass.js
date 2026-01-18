@@ -5,19 +5,7 @@ import * as THREE from 'three'
 const Compass = () => {
   const { camera } = useThree();
   const ref = useRef();
-    /*
-  useEffect(() => {
-    // Add mesh to camera
-    const meshRef = ref.current;
-    camera.add(meshRef);
-    console.log("I'm HERE")
-    console.log(camera)
-    // Cleanup on unmount
-    return () => {
-      camera.remove(meshRef);
-    };
-  }, [camera, ref.current]);
-    */
+
   useFrame((state, delta) => {
     ref.current.position.copy(camera.position)
  

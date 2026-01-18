@@ -8,7 +8,7 @@ const Mercury = (props) => {
 
     return (
       <>
-    <Sphere args={[.25, 32, 32]}>
+    <Sphere args={[100, 32, 32]}>
       <meshStandardMaterial map={texture}
 />
     </Sphere>

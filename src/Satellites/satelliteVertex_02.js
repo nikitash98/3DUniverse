@@ -58,7 +58,6 @@ void main() {
 
     // Output the transformed position
     gl_Position = vec4(pos * 0.001, 1.0); // Scale to normalized space
-
     pos *= 0.000155;
 
     vec4 modelPosition = modelMatrix * vec4(pos, 1.0);
@@ -67,9 +66,16 @@ void main() {
 
     float vDistance = length(viewPosition.xyz);
 
-    gl_PointSize = 4.0/vDistance;
-    vColor = vec4(1.0);
-    vColor.a = 1.0/vDistance;
+    float satelliteSize = (pow(radius/3000.0, 1.5))/vDistance;
+    
+    gl_PointSize = satelliteSize;
+    vColor = vec4(0.2, 0.5, 0.2, 1.0);
+    
+
+    if(satelliteSize < 1.0) {
+      vColor *= satelliteSize;
+    }
+
 
     vec3 pos_test = vec3(0.0);
     pos_test = position;

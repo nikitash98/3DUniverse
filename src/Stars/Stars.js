@@ -136,7 +136,7 @@ const Stars = (props) => {
         if(index < Math.min(Math.pow(props.distance, 1.2), 400.0)){
           return
         }
-        let star_position = [data["proper_positions"][index][0] * star_mult, data["proper_positions"][index][2] * star_mult - data["magnitude"][index] * 10.0, data["proper_positions"][index][1] * star_mult];
+        let star_position = [data["proper_positions"][index][0] * star_mult, data["proper_positions"][index][2] * star_mult, data["proper_positions"][index][1] * star_mult];
         return (
         <Html center position = {star_position}>
           <div key={value} 

@@ -10,8 +10,8 @@ const CMB = (props) => {
     return (
         <>
           <mesh frustumCulled = {false}> 
-            <sphereGeometry args={[700000, 32, 32]} />
-            <meshBasicMaterial map={colorMap}  side={THREE.DoubleSide} transparent opacity={0.01 * props.percentage_away}/>
+            <sphereGeometry args={[800000, 32, 32]} />
+            <meshBasicMaterial map={colorMap}  side={THREE.DoubleSide} transparent opacity={0.005 * props.percentage_away}/>
 
 
           </mesh>

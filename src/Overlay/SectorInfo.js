@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import "./SectorInfo.css"
+/*
 import data from "../sectorinfo.json"
 const SectorInfo = (props) => {
     const [showMoreInfo, setShowMoreInfo] = useState(false)
@@ -30,3 +31,4 @@ const SectorInfo = (props) => {
 }
 export default SectorInfo
 
+*/

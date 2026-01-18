@@ -5,13 +5,13 @@ import { useThree } from '@react-three/fiber';
 import { Vector3 } from 'three';
 import { useRef } from 'react';
 import * as THREE from 'three'
-import { CameraControls, OrbitControls, TrackballControls } from '@react-three/drei';
+import { CameraControls, OrbitControls, TrackballControls, PerspectiveCamera} from '@react-three/drei';
 import { useScroll } from '@react-three/drei';
 import { Box } from '@react-three/drei';
-import data from "./sectorinfo.json"
 import { distance } from 'three/src/nodes/TSL.js';
 const Handler = (props) => {
 const { camera: mainCamera } = useThree();
+const set = useThree(({ set }) => set)
 
 let start_dist = 0.0000000001
 let end_dist = 200000000000
@@ -22,10 +22,12 @@ const [autoRotate, setAutoRotate] = useState(true);
 const prevSectorRef = useRef(props.sectorValue);
 
 const vec = useRef(new THREE.Vector3(0, 0, 0));
+
+const testCameraRef = useRef();
 const timeoutRef = useRef(null);
-
-
-
+const testRef = useRef();
+const orbitRef = useRef();
+const orbitCameraRef = useRef();
 
 const handleScroll = () => {
   // Do something when scrolling
@@ -35,7 +37,6 @@ const handleScroll = () => {
 
 useEffect(() => {
   window.addEventListener('mousewheel', handleScroll);
-  console.log("added event")
   const controls = cameraControlsRef.current;
 
   const stopAutoRotate = () => {
@@ -47,17 +48,29 @@ useEffect(() => {
   controls.addEventListener("control", stopAutoRotate);
   return () => controls.removeEventListener("control", stopAutoRotate);
 
+  if(testCameraRef.current){
+    set({ camera: testCameraRef.current })
+  }
 }, []);
 
 
 useEffect(()=> {
-  cameraControlsRef?.current?.setLookAt(...props.cameraPosition , ...props.cameraTarget, true);
+  if(!(typeof (props.cameraTarget) === 'object' && "position" in props.cameraTarget)) {
+    cameraControlsRef?.current?.setLookAt(...props.cameraPosition , ...props.cameraTarget, true);
+  } else {
+    //cameraControlsRef.current.parent = props.cameraTarget;
+    //testCameraRef.current.parent = props.cameraTarget;
+    //testCameraRef.current.parent = props.cameraTarget;
+    //console.log(testCameraRef.current.parent)
+  }
+
+
 }, [props.cameraTarget]);
 
 
 
 useEffect(()=> {
-  cameraControlsRef?.current?.setLookAt(...props.cameraPosition , ...props.cameraTarget, true);
+  cameraControlsRef?.current?.setLookAt(...props.cameraPosition, ...props.cameraTarget, true);
 }, [props.cameraPosition]);
 
 
@@ -107,9 +120,41 @@ useEffect(()=> {
 }, [props.sectorValue])
 
 useFrame((state, delta) => {
+  
   if(state.clock.getElapsedTime() < 0.5) {
     return
   }
+
+  if(typeof (props.cameraTarget) === 'object' && "position" in props.cameraTarget) {
+
+    const worldPosition = new THREE.Vector3()
+    props.cameraTarget.getWorldPosition(worldPosition)
+    cameraControlsRef?.current?.moveTo(...[worldPosition.x, worldPosition.y, worldPosition.z], true);
+    /*
+    let cameraOffset = new THREE.Vector3();
+    let targVec = new THREE.Vector3(...cameraControlsRef?.current.target);
+    let camVec = new THREE.Vector3(...cameraControlsRef?.current.camera.position);
+    let targetDelta = targVec.sub(worldPosition)
+    */
+    //cameraControlsRef?.current?.setPosition(...[camVec.x , camVec.y , camVec.z], false);
+
+    //cameraControlsRef?.current?.setPosition(...[camVec.x + targetDelta.x , camVec.y + targetDelta.y , camVec.z + targetDelta.z], false);
+
+    //cameraControlsRef?.current?.setPosition(...[worldPosition.x, worldPosition.y, worldPosition.z], false);
+
+    //cameraControlsRef?.current?.camera.lookAt(...[worldPosition.x, worldPosition.y, worldPosition.z]);
+    //cameraControlsRef?.current?.camera.position.set(...[worldPosition.x + 15, worldPosition.y, worldPosition.z]);
+    //cameraControlsRef?.current?.setLookAt(...[worldPosition.x + 1, worldPosition.y + 1, worldPosition.z], ...[worldPosition.x, worldPosition.y, worldPosition.z], false);
+    
+  }
+
+
+  if(testCameraRef.current && orbitRef.current) {
+    testCameraRef.current.position.copy(orbitRef.current.object.position);
+    testCameraRef.current.quaternion.copy(orbitRef.current.object.quaternion);
+    testCameraRef.current.scale.copy(orbitRef.current.object.scale);
+  }
+
   let maxValue = 1000000
   if(!props.hasRun.current) {
     let cameraDistance = cameraControlsRef.current?.camera.position.length()
@@ -134,6 +179,16 @@ useFrame((state, delta) => {
       }
     }
 
+    if(typeof (props.cameraTarget) === 'object' && "position" in props.cameraTarget) {
+
+      const worldPosition = new THREE.Vector3()
+      props.cameraTarget.getWorldPosition(worldPosition)
+      //cameraControlsRef?.current?.camera.lookAt(...[worldPosition.x, worldPosition.y, worldPosition.z]);
+      //cameraControlsRef?.current?.camera.position.set(...[worldPosition.x + 15, worldPosition.y, worldPosition.z]);
+      //cameraControlsRef?.current?.setLookAt(...[worldPosition.x + 15, worldPosition.y + 10, worldPosition.z], ...[worldPosition.x, worldPosition.y, worldPosition.z], true);
+      
+    }
+
   }
 
 
@@ -153,18 +208,51 @@ useFrame((state, delta) => {
 });
   return <>
 
-  <CameraControls ref = {cameraControlsRef} minDistance = {start_dist} maxDistance={end_dist} noPan target={[0, 0, 0]} >
-      <perspectiveCamera position={[0, 1, 0]} fov={80} >
-      <group position={[-2, -2, -2]}>
+<group position={[100, 0, 0]}>
 
-<mesh >
-<boxGeometry args={[0.2, 0.2, 0.2]} />
-<meshBasicMaterial color="hotpink" />
-</mesh>
 </group>
+  {/*
+  <group position={[0, 0, 0]}>
+    <perspectiveCamera position={[0, 5 ,0]} ref = {testCameraRef}/>
+  </group>
 
-        </perspectiveCamera>
-  </CameraControls>
+
+
+  <OrbitControls target={[0, 0, 0]} ref = {orbitRef}>
+
+  </OrbitControls>
+  */}
+
+  {/*
+    <perspectiveCamera ref = {orbitCameraRef}/>
+
+    <group ref = {testCameraRef}>
+
+      <PerspectiveCamera 
+        makeDefault 
+        position={[0, 500, 0]} 
+        rotation = {[-Math.PI/2, 0, 0]}
+        fov={75} 
+        near={0.1} 
+        far={1000} 
+        />
+
+    </group>
+
+
+
+  */}
+  <group position={[0, 0, 0]}>
+    <CameraControls ref = {cameraControlsRef} minDistance = {start_dist} maxDistance={end_dist} noPan target={[0, 0, 0]} >
+        <group position={[0, 0, 0]}>
+          <perspectiveCamera position={[0, 0, 0]} fov={10} >
+          </perspectiveCamera>
+
+        </group>
+
+    </CameraControls>
+  </group>
+
 
   </>
 }

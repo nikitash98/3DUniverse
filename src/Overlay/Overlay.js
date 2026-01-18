@@ -8,6 +8,7 @@ import InformationBox from './InformationBox.js';
 import { useState } from 'react';
 import ContentSlider from './ContentSlider.js';
 import guidedData from "../guidedStory.json"
+import ReactSlider from 'react-slider';
 function Overlay(props) {
 
 
@@ -39,13 +40,26 @@ function Overlay(props) {
                                     onClick={()=> {setViewSettings((prev) => !prev)}}
                                     > view settings
                                 </Button>     
+                                <ReactSlider
+                                        className="horizontal-slider"
+                                        thumbClassName="example-thumb"
+                                        trackClassName="example-track"
+                                        max={10}
+                                        min={-10}
+                                        value = {props.timeSpeed}
+                                        onChange={(value) => {
+                                            console.log(value)
+                                            props.setTimeSpeed(value)
+                                        }}
+                                        renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+                                    />
+
 
                             {viewSettings && (
 
                             <div>
-
                                 <Divider/>
-
+                                    
                                     <Button 
                                     className='toggle_button'
                                     toggle
@@ -88,7 +102,7 @@ function Overlay(props) {
                                     > hide ui</button>
                                     <br/>
 
-                                © <a href="https://menard.pha.jhu.edu/" target="_blank">Ménard</a> and <a href="https://nikitashtarkman.com/" target="_blank">Shtarkman </a>
+                                © <a href="https://nikitashtarkman.com/" target="_blank">Nikita Shtarkman </a>
                             </div>
                             
                         </div>
@@ -129,10 +143,12 @@ function Overlay(props) {
                                         props.setCameraTarget([0, 0, 0])
                                     }
                                 }>
+                                    {/*
                                 <img src='icons/Material_Symbol_Recenter_02.svg'/>
                                 <br/>
+                                    */}
 
-                                <div className='small_text' style={{"textAlign": "center", "color": "grey"}}>
+                                <div className='small_text' style={{"textAlign": "center", "color": "var(--medium-grey)"}}>
                                     recenter
                                 </div>
                             </Button>

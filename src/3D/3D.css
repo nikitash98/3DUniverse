@@ -20,12 +20,44 @@
     color: var(--medium-grey);
     box-shadow: 0 0 5px 5px #010101;
     opacity: 0.5;
-    
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
-
     font-weight: 100;
 
-    
+  }
+
+  #mercury {
+    color: #5C5C5C;
+  }
+  
+  #venus {
+    color: #BFA76F;
+  }
+  
+  #earth {
+    color: #2E8BCE;
+  }
+  
+  #mars {
+    color: #B7410E;
+  }
+  
+  #jupiter {
+    color: #C57B57;
+  }
+  
+  #saturn {
+    color: #C2B280;
+  }
+  
+  #uranus {
+    color: #6BC4C4;
+  }
+  
+  #neptune {
+    color: #4169E1;
+  }
+  #sun {
+    color: orange;
   }
 
   .annotation_text {
@@ -44,10 +76,26 @@
     color: var(--medium-grey);
     opacity: 0.5;
 
-
-
   }
 
+  .asteroid_text {
+  }
+
+
+  .satellite_text {
+    font-family: "ocr-a-std", monospace;
+    font-weight: 400;
+    font-style: normal;
+    color: rgb(51, 128, 51);
+    font-size: 8pt;
+    text-wrap: nowrap;
+    max-width: 100px;
+    opacity: 0.5;
+  }
+
+  .satellite_text:hover {
+    opacity: 1;
+  }
   .planet_text:hover {
     color: white;
     opacity: 1;

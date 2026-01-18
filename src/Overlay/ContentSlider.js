@@ -20,21 +20,6 @@ const ContentSlider = (props) => {
                             marks = {33}
                             renderMark={(props) => {
                                 
-                                /*
-                                let tick_class = "tick_label_top small_type"
-                                if(Math.floor(props.key/mul > Math.floor(convertCounter(val, show, mul)/mul))) {
-                                    props.className = "customSlider-mark selected_mark"
-                                    tick_class = "tick_label_top small_type  selected_tick"
-                                } 
-                                if(props.key == show.length * mul) {
-                                    props.className = "customSlider-mark end_mark"
-                                }
-                                return <span {...props}  onMouseEnter={()=>{setSliderHover(props.key)}} onMouseLeave={()=> {setSliderHover(null)}}>
-                                    <div className={tick_class} >
-                                        {slides[show_two[Math.floor(props.key/mul)]]["title"]}
-                                    </div>
-                                </span>;
-                                */
                                return <>
 
                                         <div {...props} className='slider_label_text '>

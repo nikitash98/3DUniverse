@@ -9,7 +9,7 @@ const Mars = (props) => {
 
     return (
       <>
-    <Sphere args={[.25, 32, 32]}>
+    <Sphere args={[1.0, 32, 32]}>
       <meshStandardMaterial map={texture}
 />
     </Sphere>

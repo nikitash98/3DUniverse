@@ -2,6 +2,7 @@ const vertexShader = `
 uniform float uTime;
 varying vec3 vColor;
 varying float vDist;
+uniform float uDistance;
 
 attribute vec3 orbitalElements;
 attribute vec3 extraOrbitalElements;
@@ -82,7 +83,7 @@ mat3 RzID = mat3(
   gl_Position = projectedPosition;
 
   float vDistance = length(viewPosition.xyz);
-  float asteroidSize  = diameter * 10000.0;
+  float asteroidSize  = diameter * 1000.0;
   asteroidSize /= vDistance;
 
   gl_PointSize = asteroidSize;
@@ -91,6 +92,7 @@ mat3 RzID = mat3(
   if(asteroidSize < 1.0) {
     vColor *= asteroidSize;
   }
+  vColor *= (uDistance/10000.0);
     
 }
 

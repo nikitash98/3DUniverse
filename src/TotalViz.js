@@ -5,7 +5,6 @@ import ReactSlider from "react-slider";
 import { Canvas} from '@react-three/fiber'
 import { Stats, OrbitControls, TrackballControls, Box, Sphere, Line} from '@react-three/drei'
 import { Suspense, useState, useRef } from 'react';
-import data from "./sectorinfo.json"
 import Overlay from './Overlay/Overlay.js';
 
 import "./3D/3D.css"
@@ -14,16 +13,14 @@ import "./3D/3D.css"
 
 import Stars from "./Stars/Stars.js"
 import UniverseThree from './Galaxies/UniverseThree.js';
-import Satellites from './Satellites/Satellites.js';
 import CMB from './CMB';
-import TestPoints from './TestPoints.js';
 import * as Constants from "./constants.jsx"
 import { BackgroundScene } from './3D/Background.js';
 import { Ecliptic } from './3D/Ecliptic.js';
 import { EffectComposer, Vignette, Bloom, DepthOfField} from "@react-three/postprocessing";
 import { useEffect } from 'react';
 import Handler from './Handler.js';
-import { Grid, Html } from '@react-three/drei';
+import { Grid, Html, PerspectiveCamera } from '@react-three/drei';
 import TexturedSphere from './3D/TexturedSphere.js';
 import MilkyWaySphere from './3D/MilkyWaySphere.js';
 import { CheckGPULimits } from './CheckGPULimits.js';
@@ -34,6 +31,13 @@ import NearGalaxies from './Galaxies/NearGalaxies.js';
 import SDSSGalaxies from './Galaxies/SDSSGalaxies.js';
 import Compass from './3D/Compass.js';
 import MilkyWayPlane from './3D/MilkyWayPlane.js';
+import guidedData from "./guidedStory.json"
+import { useFrame } from '@react-three/fiber';
+function TimeKeeper(props) {
+  useFrame((state, delta) => {
+    props.globalTime.current += delta * props.timeSpeed;
+  })
+}
 
 const TotalViz = (props) => {
 
@@ -45,7 +49,9 @@ const TotalViz = (props) => {
     const [sector, setSector] = useState("Earth");
     const [showSectorInfo, setShowSectorInfo] = useState(true)
     const [zoom_to, set_zoom_to] = useState(false)
-
+    const [timeSpeed, setTimeSpeed] = useState(1.0);
+    const globalTime = useRef(0)
+    const movingRefs = useRef({});
 
 
     const [guidedSection, setGuidedSection] = useState(0)
@@ -81,9 +87,15 @@ const TotalViz = (props) => {
       new THREE.Vector3(800, 0, 800),
   
     ];
-  
+
     // Convert points to BufferGeometry
 
+
+    useEffect(()=> {
+      setCameraPosition(guidedData[guidedSection].cameraPosition)
+      setCameraTarget(guidedData[guidedSection].cameraTarget)
+    }, [guidedSection]);
+    
     return<>
         <div id='overlay-container'>
           <Overlay 
@@ -107,33 +119,43 @@ const TotalViz = (props) => {
           cameraTarget = {cameraTarget}
           guidedSection = {guidedSection}
           setGuidedSection = {setGuidedSection}
+          setTimeSpeed = {setTimeSpeed}
+          timeSpeed = {timeSpeed}
           />
         </div>
-
+        {/*
+         
+        */}
         <div id="canvas-container">
-            <Canvas camera={{ position: [Math.sqrt(start_dist), 0, Math.sqrt(start_dist)], near: 1.0, far: 2000000000}} shadows>
+            <Canvas shadows camera={{ position: [Math.sqrt(start_dist), 0, Math.sqrt(start_dist)], near: 0.1, far: 2000000000}}>
               <CheckGPULimits/>
               <ambientLight intensity={0.01} />
-              <directionalLight intensity={1} color="white" position={[10, 0, 0]}  castShadow/>
+              <directionalLight intensity={0} color="white" position={[10, 0, 0]}  castShadow/>
+
               {/*
               <Compass/>
               */}
-
-
+      
+            <TimeKeeper globalTime = {globalTime} timeSpeed = {timeSpeed}/>
             {(sectorValue == 0 && !hasRun.current) &&
             <Suspense fallback = {<>
             </>}>
               <>
 
               {distance < 100 && (
-              <Satellites_02/>
+              <Satellites_02
+              globalTime = {globalTime}
+              setCameraTarget = {setCameraTarget}/>
               )}
               {distance < 50000000 && (
-                <group scale={1}>
+                <group scale={1.0}>
                   <SolarSystem 
                   setCameraPosition = {setCameraPosition}
                   setCameraTarget = {setCameraTarget}
-                  distance = {distance}/>
+                  movingRefs = {movingRefs}
+                  distance = {distance}
+                  globalTime = {globalTime}
+                  />
                 </group>
               )}
       
@@ -171,7 +193,7 @@ const TotalViz = (props) => {
               }>
               <>
 
-              {distance < 500 &&  (
+              {distance < 1000 &&  (
 
                 <Stars 
                 star_distance = {star_distance} 
@@ -361,7 +383,7 @@ const TotalViz = (props) => {
               </>
             </Suspense>
             }
-            {(sectorValue == 1 && sectorValue == 0) && (
+            {(sectorValue == 1 || sectorValue == 0) && (
             <TexturedSphere distance_percentage = {(1.0 - (distance * !hasRun.current)) * 0.2}/>
 
             )}
@@ -430,7 +452,6 @@ const TotalViz = (props) => {
               <Vignette eskil={false} offset={0.3} darkness={0.9} />
               </EffectComposer>
 
-
             <Handler 
               setDistance = {setDistance} 
               distance = {distance} 
@@ -444,6 +465,22 @@ const TotalViz = (props) => {
               setRaDec = {setRaDec}
               hasRun = {hasRun}
               />
+
+            {/*
+
+                            <group position={[100, 0, 0]}>
+
+                <PerspectiveCamera 
+                makeDefault 
+                position={[0, 0, 5]} 
+                fov={75} 
+                near={0.1} 
+                far={1000} 
+              />
+              </group>
+
+            */}
+
             </Canvas>
         </div>
     </> 

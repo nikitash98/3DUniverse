@@ -12,9 +12,9 @@ import { useLoader, useFrame} from '@react-three/fiber';
 export default function Earth_P(props) {
   const { nodes, materials } = useGLTF('3D/earth.glb')
 
-  const earthDiffuse = useLoader(THREE.TextureLoader, 'Textures/Planets/Earth/Earth_Diffuse.png'); // Adjust the path to your texture
+  const earthDiffuse = useLoader(THREE.TextureLoader, 'Textures/Planets/Earth/EarthColorMap.png'); // Adjust the path to your texture
   const earthNormal = useLoader(THREE.TextureLoader, 'Textures/Planets/Earth/Earth_Normal.png'); // Adjust the path to your texture
-  const earthClouds = useLoader(THREE.TextureLoader, 'Textures/Planets/Earth/Earth_Clouds.png'); // Adjust the path to your texture
+  const earthClouds = useLoader(THREE.TextureLoader, 'Textures/Planets/Earth/EarthCloudMap.png'); // Adjust the path to your texture
   const earthRoughness = useLoader(THREE.TextureLoader, 'Textures/Planets/Earth/Earth_Specular.png'); // Adjust the path to your texture
 
   const materialRef = useRef();
@@ -25,8 +25,15 @@ export default function Earth_P(props) {
     atmOpacity: { value: 1.0 },
     atmPowFactor: { value: 4.1 },
     atmMultiplier: { value: 9.5 },
+
+    
   };
 
+  const earthuniforms = {
+    dayMap: { value: new THREE.TextureLoader().load( 'Textures/Planets/Earth/EarthColorMap.png' ) },
+    nightMap: { value: new THREE.TextureLoader().load( 'Textures/Planets/Earth/EarthNightColorMap.png' ) },
+    lightDirection: {value: new THREE.Vector3(1, 0, 0)}
+  }
   useFrame((state, delta) => {
     cloudRef.current.rotation.y += Math.PI/300 * delta;
   })
@@ -76,11 +83,47 @@ const fragmentShader = `
 `;
 
 
+const earthVertexShader = `
+  varying vec2 vUv;
+  varying vec3 vNormal;
+  varying vec3 wPos;
+
+  void main() {
+    vUv = uv;
+    vNormal = normal;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+
+`
 const earthFragmentShader = `
-uniform sampler2D dayMap;
-uniform sampler2D nightMap;
-varying vec3 vNormal;
-varying vec2 vUv;
+  // Some code from here
+  //https://matiasgf.dev/experiments/earth
+  uniform sampler2D dayMap;
+  uniform sampler2D nightMap;
+  uniform vec3 lightDirection;
+  varying vec3 vNormal;
+  varying vec2 vUv;
+  varying vec3 wPos;
+
+  void main() {
+    vec3 dayColor = texture2D(dayMap, vUv).rgb;
+    vec3 nightColor = texture2D(nightMap, vUv).rgb;
+    float lambertCoeff = dot(lightDirection, vNormal);
+
+    vec3 viewDirection = normalize(cameraPosition - wPos);
+
+    float fresnelBias = 0.0;
+    float fresnelScale = 0.3;
+    float fresnelFactor = fresnelBias + fresnelScale * pow(1.0 - dot(vNormal, normalize(viewDirection)), 3.0);
+    vec3 atmosphereColor = vec3(0.51,0.714,1.);
+
+    vec3 resultColor = vec3(1.0);
+    resultColor = dayColor * max(lambertCoeff, 0.0);
+    resultColor += atmosphereColor * fresnelFactor;
+    resultColor += nightColor * max(-lambertCoeff, 0.0) * 0.2;
+    gl_FragColor.rgb = resultColor;
+    //gl_FragColor.rgb = dayColor * lambertCoeff + nightColor * (max(1.0-lambertCoeff, 0.0)) * (max(lambertCoeff, 0.2)) + atmosphereColor * fresnelFactor ;
+  }
 
 `
   return (
@@ -101,17 +144,25 @@ varying vec2 vUv;
       </mesh>
        */}
 
-      <Sphere args={[1.05, 32, 32]} renderOrder={3}>
+      <Sphere args={[1.0, 32, 32]} renderOrder={5}>
         <shaderMaterial
           ref={materialRef}
-          uniforms={uniforms}
+          uniforms={earthuniforms}
+          vertexShader={earthVertexShader}
+          fragmentShader={earthFragmentShader}
+          />
+      </Sphere>
+
+      <Sphere args={[1.08, 64, 64]} renderOrder={1}>
+        <shaderMaterial
           vertexShader={vertexShader}
           fragmentShader={fragmentShader}
           side={THREE.BackSide}
           transparent
+        />
 
-          />
       </Sphere>
+      {/*
 
       <Sphere args={[1, 64, 64]} renderOrder={1}>
         <meshStandardMaterial map = {earthDiffuse} normalMap={earthNormal}
@@ -120,8 +171,9 @@ varying vec2 vUv;
               normalMap-colorSpace={THREE.LinearSRGBColorSpace}
         />
       </Sphere>
+       */}
 
-      <Sphere args={[1.01, 32, 32]} ref={cloudRef} renderOrder={0}>
+      <Sphere args={[1.005, 32, 32]} ref={cloudRef} renderOrder={0}>
         <meshStandardMaterial map = {earthClouds} 
                   transparent 
                   opacity={1.0} 
@@ -130,7 +182,6 @@ varying vec2 vUv;
         />
       </Sphere>
 
-      
 
     </group>
   )

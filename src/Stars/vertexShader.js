@@ -47,9 +47,6 @@ vColor = color;
   vec3 starColor = texture2D( colorTexture, texCoordTest ).rgb;
   vColor = vec3(starColor);
 
-  if(starSize < 1.0) {
-    vColor *= starSize;
-  }
   vColor *= min(uDistance, 1.0);
   vColor *= 10.0/vDistance;
 }

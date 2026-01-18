@@ -13,25 +13,28 @@ function OrbitalObject(props) {
   const meshRef = useRef()
   
   useFrame((state, delta) => {
-    const angle = state.clock.getElapsedTime();
+    const angle = props.globalTime.current;
     let orbitalPositionComputed = computeOrbitalPosition(props.a * 23454.8, props.e, props.i, props.om, props.w, props.ma, angle)
+    //props.movingRefs.current[props.full_name].position.set(...orbitalPositionComputed);
     meshRef.current.position.set(...orbitalPositionComputed);
   })
 
+
   return (
+    
     <>
       <group ref={meshRef}>
           <Html center
             position={[0.0, 0, 0]}>
-            <div className={"planet_text"}>
+            <div className={"planet_text"} 
+            onClick={()=> {
+              props.setCameraTarget(meshRef.current)
+
+            }}>
               {props.full_name}
             </div>
           </Html>
 
-      <mesh >
-        <sphereGeometry args={[1, 32, 32]} />
-        <meshBasicMaterial color={"red"}/>
-      </mesh>
     </group>
 
     </>
@@ -76,7 +79,6 @@ function computeOrbitalPosition(
   ω_deg,
   M_deg,
   input_time) {
-    console.log(input_time)
   const e = e_deg * Math.PI / 180;
   const i = i_deg * Math.PI / 180;
   const Ω = Ω_deg * Math.PI / 180;
@@ -197,7 +199,7 @@ const Asteroids = (props) => {
 
     useFrame((state) => {
         points.current.material.uniforms.uDistance.value = props.distance;
-        points.current.material.uniforms.uTime.value = state.clock.elapsedTime;
+        points.current.material.uniforms.uTime.value = props.globalTime.current;
         //points.current.material.uniforms.uTime.value = 0.0;
 
     })
@@ -207,6 +209,11 @@ const Asteroids = (props) => {
       <>
 
       {data["full_name"].slice(0, 10).map((value, index) => {
+        if(props.distance > 500000 || props.distance < 50000) {
+          return
+        }
+    
+
         return (
           <OrbitalObject 
             a = {data["a"][index]}
@@ -216,7 +223,9 @@ const Asteroids = (props) => {
             w = {data["w"][index]}
             ma = {data["ma"][index]}
             full_name = {data["full_name"][index]}
-
+            movingRefs = {props.movingRefs}
+            setCameraTarget = {props.setCameraTarget}
+            globalTime = {props.globalTime}
           />
         )
       })}

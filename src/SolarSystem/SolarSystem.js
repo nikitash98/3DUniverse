@@ -24,15 +24,14 @@ const SolarSystem = (props) => {
     const orbitRefs = useRef({})
     const orbitDistances = [9093, 16923, 35868, 122253, 224804, 454660, 732508]
     const solarSystemRef = useRef()
-
-    let textDistance = 1500000;
+    let textDistance = 4500000;
     let moonDistance = 20000;
     useFrame((state, delta) => {
-        Object.values(orbitRefs.current).forEach((ref, index) => {
-            let orbitSpeed = 0.1;
+        Object.values(props.movingRefs.current).forEach((ref, index) => {
+            let orbitSpeed = 0.01;
           if (ref) {
-            ref.position.x = Math.sin(state.clock.elapsedTime * orbitSpeed/(orbitDistances[index]/10000.0) + index * 3.0) * orbitDistances[index];
-            ref.position.z = Math.cos(state.clock.elapsedTime * orbitSpeed/(orbitDistances[index]/10000.0) + index * 3.0) * orbitDistances[index];
+            ref.position.x = Math.sin(props.globalTime.current * orbitSpeed/(orbitDistances[index]/10000.0) + index * 3.0) * orbitDistances[index];
+            ref.position.z = Math.cos(props.globalTime.current * orbitSpeed/(orbitDistances[index]/10000.0) + index * 3.0) * orbitDistances[index];
 
 
             /*
@@ -50,7 +49,6 @@ const SolarSystem = (props) => {
         })
 
 
-
         /*
         if(solarSystemRef.current) {
             solarSystemRef.current.rotation.y = state.clock.elapsedTime * .1;
@@ -58,15 +56,16 @@ const SolarSystem = (props) => {
             solarSystemRef.current.position.z = Math.cos(state.clock.elapsedTime * .1) * 23544
 
         }
-        */
+            */
       })
     
 
     return (<>
+
              <Earth_P setCameraTarget = {props.setCameraTarget} setCameraPosition = {props.setCameraPosition}/>
              {props.distance < textDistance && (
-                <Html center position={[0,-1,0 ]}>
-                    <div className={"planet_text"}
+                <Html center position={[0,-1.3,0 ]}>
+                    <div id="earth"  className={"planet_text"}
                     onClick={()=> {
                         props.setCameraTarget([0, 0, 0])
                         props.setCameraPosition([5, 0, 0])
@@ -78,16 +77,13 @@ const SolarSystem = (props) => {
             )}
              
             <Ecliptic xRadius={60} zRadius = {60}/>
-            <group position={[0, 1.08, 0]} scale={0.0001}>
-                <ISS/>
-            </group>
 
             <group position={[60, 0, 0]} >
                 <Moon setCameraTarget = {props.setCameraTarget} setCameraPosition = {props.setCameraPosition}/>
                 {props.distance < moonDistance && (
 
                 <Html center position={[0,-.25,0 ]}>
-                    <div className={"planet_text"} onClick={()=> {
+                    <div  className={"planet_text"} onClick={()=> {
                         props.setCameraTarget([60, 0, 0])
                         props.setCameraPosition([61, 0.2, 0.5])
                     }}> 
@@ -99,13 +95,20 @@ const SolarSystem = (props) => {
             </group>
 
             <group position={[23544, 0, 0]} ref = {solarSystemRef}>
-                <Asteroids/>
+                <Asteroids
+                distance = {props.distance}
+                setCameraTarget = {props.setCameraTarget}
+                movingRefs = {props.movingRefs}
+                globalTime = {props.globalTime}
+                />
                 <Ecliptic xRadius={23544.1845864} zRadius = {23544.1845864}/>
                 <Sun setCameraTarget = {props.setCameraTarget} setCameraPosition = {props.setCameraPosition}/>
+                <pointLight intensity={100000}  position={[0, 0, 0]} distance={10000000} decay={1}/>
+
                 {props.distance < textDistance && (
 
                 <Html center position={[0,-109,0 ]}>
-                    <div className={"planet_text"} onClick={()=> {
+                    <div id="sun" className={"planet_text"} onClick={()=> {
                         props.setCameraTarget([23544, 0, 0])
                         props.setCameraPosition([23544 + 109 * 2, 0, 0])
                     }}> 
@@ -116,27 +119,14 @@ const SolarSystem = (props) => {
 
 
                 <Ecliptic xRadius={9093 } zRadius = {9093} />
-                <group position={[9093, 0, 0]} ref={ref => orbitRefs.current["Mercury"] = ref}>
+                <group position={[9093, 0, 0]} ref={ref => props.movingRefs.current["Mercury"] = ref}>
+
                     <Mercury setCameraTarget = {props.setCameraTarget} setCameraPosition = {props.setCameraPosition}/>
                     {props.distance < textDistance && (
 
                     <Html center position={[0,-.25,0 ]}>
-                        <div className={"planet_text"} onClick={()=> {
-                            console.log(orbitRefs.current["Mercury"].position)
-                            const worldPositionTarget = new THREE.Vector3()
-                            orbitRefs.current["Mercury"].getWorldPosition(worldPositionTarget)
-                            let camTarget = [worldPositionTarget.x, worldPositionTarget.y, worldPositionTarget.z];
-                            let camPos = [9093, 0, 0]
-
-                            props.setCameraTarget(camTarget)
-                            console.log(camTarget)
-
-                            camPos[0] = worldPositionTarget.x 
-                            camPos[1] = 100
-                            camPos[2] = worldPositionTarget.z
-                            console.log(camPos)
-
-                            props.setCameraPosition(camPos)
+                        <div id="mercury" className={"planet_text"} onClick={()=> {
+                            props.setCameraTarget(props.movingRefs.current["Mercury"])
                         }}> 
                             Mercury
                         </div>
@@ -145,14 +135,13 @@ const SolarSystem = (props) => {
                 </group>
 
                 <Ecliptic xRadius={16923} zRadius = {16923}/>
-                <group position={[16923, 0, 0]} ref={ref => orbitRefs.current["venus"] = ref}>
+                <group position={[16923, 0, 0]} ref={ref => props.movingRefs.current["venus"] = ref}>
                     <Venus setCameraTarget = {props.setCameraTarget} setCameraPosition = {props.setCameraPosition}/>
                     {props.distance < textDistance && (
 
                     <Html center position={[0,-.25,0 ]}>
-                        <div className={"planet_text"} onClick={()=> {
-                            props.setCameraTarget([60, 0, 0])
-                            props.setCameraPosition([61, 0.2, 0.5])
+                        <div id="venus"  className={"planet_text"} onClick={()=> {
+                            props.setCameraTarget(props.movingRefs.current["venus"])
                         }}> 
                             Venus
                         </div>
@@ -162,14 +151,13 @@ const SolarSystem = (props) => {
                 </group>
 
                 <Ecliptic xRadius={35868} zRadius = {35868}/>
-                <group position={[35868, 0, 0]} ref={ref => orbitRefs.current["mars"] = ref}>
+                <group position={[35868, 0, 0]} ref={ref => props.movingRefs.current["mars"] = ref}>
                     <Mars setCameraTarget = {props.setCameraTarget} setCameraPosition = {props.setCameraPosition}/>
                     {props.distance < textDistance && (
 
                     <Html center position={[0,-.25,0 ]}>
-                        <div className={"planet_text"} onClick={()=> {
-                            props.setCameraTarget([60, 0, 0])
-                            props.setCameraPosition([61, 0.2, 0.5])
+                        <div id="mars" className={"planet_text"} onClick={()=> {
+                            props.setCameraTarget(props.movingRefs.current["mars"])
                         }}> 
                             Mars
                         </div>
@@ -179,14 +167,13 @@ const SolarSystem = (props) => {
 
                 <Ecliptic xRadius={122253} zRadius = {122253}/>
 
-                <group position={[122253, 0, 0]} ref={ref => orbitRefs.current["jupiter"] = ref}>
+                <group position={[122253, 0, 0]} ref={ref => props.movingRefs.current["jupiter"] = ref}>
                     <Jupiter setCameraTarget = {props.setCameraTarget} setCameraPosition = {props.setCameraPosition}/>
                     {props.distance < textDistance && (
 
                     <Html center position={[0,-.25,0 ]}>
-                        <div className={"planet_text"} onClick={()=> {
-                            props.setCameraTarget([60, 0, 0])
-                            props.setCameraPosition([61, 0.2, 0.5])
+                        <div id="jupiter" className={"planet_text"} onClick={()=> {
+                            props.setCameraTarget(props.movingRefs.current["jupiter"])
                         }}> 
                             Jupiter
                         </div>
@@ -195,14 +182,13 @@ const SolarSystem = (props) => {
                 </group>
 
                 <Ecliptic xRadius={224804} zRadius = {224804}/>
-                <group position={[224804, 0, 0]} ref={ref => orbitRefs.current["saturn"] = ref}>
+                <group position={[224804, 0, 0]} ref={ref => props.movingRefs.current["saturn"] = ref}>
                     <Saturn setCameraTarget = {props.setCameraTarget} setCameraPosition = {props.setCameraPosition}/>
                     {props.distance < textDistance && (
                         <Html center position={[0,-.25,0 ]}>
-                            <div className={"planet_text"} onClick={()=> {
-                                props.setCameraTarget([60, 0, 0])
-                                props.setCameraPosition([61, 0.2, 0.5])
-                            }}> 
+                            <div id="saturn" className={"planet_text"} onClick={()=> {
+                            props.setCameraTarget(props.movingRefs.current["saturn"])
+                        }}> 
                                 Saturn
                             </div>
                         </Html>
@@ -210,13 +196,12 @@ const SolarSystem = (props) => {
                 </group>
 
                 <Ecliptic xRadius={454660} zRadius = {454660}/>
-                <group position={[454660, 0, 0]} ref={ref => orbitRefs.current["uranus"] = ref}>
+                <group position={[454660, 0, 0]} ref={ref => props.movingRefs.current["uranus"] = ref}>
                     <Uranus setCameraTarget = {props.setCameraTarget} setCameraPosition = {props.setCameraPosition}/>
                     {props.distance < textDistance && (
                     <Html center position={[0,-.25,0 ]}>
-                        <div className={"planet_text"} onClick={()=> {
-                            props.setCameraTarget([60, 0, 0])
-                            props.setCameraPosition([61, 0.2, 0.5])
+                        <div id="uranus" className={"planet_text"} onClick={()=> {
+                            props.setCameraTarget(props.movingRefs.current["uranus"])
                         }}> 
                             Uranus
                         </div>
@@ -225,14 +210,13 @@ const SolarSystem = (props) => {
 
                 </group>
                 <Ecliptic xRadius={732508} zRadius = {732508}/>
-                <group position={[732508, 0, 0]} ref={ref => orbitRefs.current["neptune"] = ref}>
+                <group position={[732508, 0, 0]} ref={ref => props.movingRefs.current["neptune"] = ref}>
                     {props.distance < textDistance && (
 
                         <Html center position={[0,-.25,0 ]}>
-                            <div className={"planet_text"} onClick={()=> {
-                                props.setCameraTarget([60, 0, 0])
-                                props.setCameraPosition([61, 0.2, 0.5])
-                            }}> 
+                            <div id="neptune" className={"planet_text"} onClick={()=> {
+                            props.setCameraTarget(props.movingRefs.current["neptune"])
+                        }}> 
                                 Neptune
                             </div>
                         </Html>
